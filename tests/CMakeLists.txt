@@ -4,8 +4,11 @@ set(This Tests)
 
 set(Sources 
 	Tuple_test.cpp
-	../src/Tuple/Tuple.h
+	Color_test.cpp
+	Canvas_test.cpp
 	../src/Tuple/Tuple.cpp
+	../src/Color/Color.cpp
+	../src/Canvas/Canvas.cpp
 	)
 
 add_executable(${This} ${Sources})
@@ -16,6 +19,8 @@ target_link_libraries(${This} PUBLIC
 
 target_include_directories(${This} PUBLIC
 	../src/Tuple
+	../src/Color
+	../src/Canvas
 )
 
 add_test(

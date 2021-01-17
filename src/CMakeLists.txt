@@ -4,8 +4,9 @@ set(This RayTracer)
 
 set(Sources 
 	main.cpp
-	Tuple/Tuple.h
 	Tuple/Tuple.cpp
+	Color/Color.cpp
+	Canvas/Canvas.cpp
 	)
 
 add_executable(${This} ${Sources})

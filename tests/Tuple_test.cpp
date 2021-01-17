@@ -1,16 +1,17 @@
 #include <gtest/gtest.h>
 #include <cmath>
+
 #include "Tuple.h"
 
 class Tuple_test: public ::testing::Test { 
 public: 
-    const float x1 = 1.0f, y1 = 2.0f, z1 = 3.0f;
-    const float x2 = 2.0f, y2 = 1.0f, z2 = 0.0f;
-    const float zero = 0.0f, one = 1.0f;
+    const float x1{1.0f}, y1{2.0f}, z1{3.0f};
+    const float x2{2.0f}, y2{1.0f}, z2{0.0f};
+    const float zero{0.0f}, one{1.0f};
 };
 
 TEST_F(Tuple_test, is_point_when_w_is_1) {
-    Tuple tuple(x1, y1, z1, one);
+    Tuple tuple{x1, y1, z1, one};
     ASSERT_EQ(tuple.x, x1);
     ASSERT_EQ(tuple.y, y1);
     ASSERT_EQ(tuple.z, z1);
@@ -20,7 +21,7 @@ TEST_F(Tuple_test, is_point_when_w_is_1) {
 }
 
 TEST_F(Tuple_test, is_direction_when_w_is_0){
-    Tuple tuple(x1, y1, z1, zero);
+    Tuple tuple{x1, y1, z1, zero};
     
     ASSERT_EQ(tuple.x, x1);
     ASSERT_EQ(tuple.y, y1);
@@ -49,7 +50,7 @@ TEST_F(Tuple_test, creates_vector_with_vector_factory_method){
 }
 
 TEST_F(Tuple_test, tuple_equal_operator_overload){
-    float x(1.0f), y(2.0f), z(3.0f), w(1.0f);
+    float x{1.0f}, y{2.0f}, z{3.0f}, w{1.0f};
     Tuple tuple1(x1, y1, z1, one);
     Tuple tuple2(x1, y1, z1, one);
     Tuple tuple3(y1, x1, z1, one);
@@ -103,7 +104,7 @@ TEST_F(Tuple_test, vector_minus_vector_gives_a_vector){
 }
 
 TEST_F(Tuple_test, tuple_negating_operator_overload){
-    Tuple tuple(x1, y1, z1, one);
+    Tuple tuple{x1, y1, z1, one};
 
     Tuple result = -tuple;
 
@@ -115,7 +116,7 @@ TEST_F(Tuple_test, tuple_negating_operator_overload){
 
 TEST_F(Tuple_test, tuple_multiplication_by_float_operator_overload){
     const float scalar = 3.0f;
-    Tuple tuple(x1, y1, z1, one);
+    Tuple tuple{x1, y1, z1, one};
     Tuple result1 = tuple*scalar;
     
     ASSERT_EQ(result1.x, x1*scalar);
@@ -125,8 +126,8 @@ TEST_F(Tuple_test, tuple_multiplication_by_float_operator_overload){
 }
 
 TEST_F(Tuple_test, tuple_multiplication_by_another_tuple_operator_is_dot_product_overload){
-    Tuple tuple1(x1, y1, z1, one);
-    Tuple tuple2(x2, y2, z2, one);
+    Tuple tuple1{x1, y1, z1, one};
+    Tuple tuple2{x2, y2, z2, one};
     float expected = x1*x2 + y1*y2 + z1*z2 + one*one;
     float result = tuple1 * tuple2;
 
@@ -135,7 +136,7 @@ TEST_F(Tuple_test, tuple_multiplication_by_another_tuple_operator_is_dot_product
 
 TEST_F(Tuple_test, tuple_division_operator_overload){
     const float scalar = 3.0f;
-    Tuple tuple(x1, y1, z1, one);
+    Tuple tuple{x1, y1, z1, one};
     Tuple result1 = tuple*scalar;
     
     ASSERT_EQ(result1.x, x1*scalar);
@@ -145,7 +146,7 @@ TEST_F(Tuple_test, tuple_division_operator_overload){
 }
 
 TEST_F(Tuple_test, magnitude_should_return_tuple_length){
-    Tuple tuple(x1, y1, z1, one);
+    Tuple tuple{x1, y1, z1, one};
     float expected = sqrt(x1*x1 + y1*y1 + z1*z1 + one*one);
     float result = magnitude(tuple);
 
@@ -153,7 +154,7 @@ TEST_F(Tuple_test, magnitude_should_return_tuple_length){
 }
 
 TEST_F(Tuple_test, normalize_should_return_normalized_tuple){
-    Tuple tuple(x1, y1, z1, one);
+    Tuple tuple{x1, y1, z1, one};
     float magnitude = sqrt(x1*x1 + y1*y1 + z1*z1 + one*one);
     Tuple expected = tuple / magnitude;
     Tuple result = normalize(tuple);
