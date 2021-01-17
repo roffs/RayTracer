@@ -13,4 +13,6 @@ add_executable(${This} ${Sources})
 
 target_include_directories(${This} PUBLIC
 	Tuple
+	Color
+	Canvas
 )

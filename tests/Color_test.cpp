@@ -48,11 +48,11 @@ TEST_F(Color_test, substracting_colors_returns_color_with_substracted_rgb){
 TEST_F(Color_test, multiplying_color_by_scalar_returns_color_scalar_times_rgb){
     Color color{red1, green1, blue1};
     float scalar = 2.0f;
-    Color result = color*scalar;
+    color = color*scalar;
 
-    ASSERT_EQ(result.red, red1*scalar);
-    ASSERT_EQ(result.green, green1*scalar);
-    ASSERT_EQ(result.blue, blue1*scalar);
+    ASSERT_EQ(color.red, red1*scalar);
+    ASSERT_EQ(color.green, green1*scalar);
+    ASSERT_EQ(color.blue, blue1*scalar);
 }
 
 TEST_F(Color_test, multiplying_color_by_color_returns_color_with_hadamard_product){
