@@ -56,17 +56,18 @@ Matrix::Matrix(
   array[3] = y2;
 };
 
+Matrix::Matrix(int dimension) : array{new float[dimension*dimension]}, dimension{dimension} {};
 
 //Operator overloads
 
 float& Matrix::operator() (int x, int y)
 {
-  return array[(x-1)*dimension + (y-1)];
+  return array[x*dimension + y];
 };
 
-float Matrix::operator() (int x, int y) const
+float& Matrix::operator() (int x, int y) const
 {
-  return array[(x-1)*dimension + (y-1)];
+  return array[x*dimension + y];
 };
 
 bool Matrix::operator== (Matrix const& other) {
@@ -85,13 +86,12 @@ bool Matrix::operator!= (Matrix const& other) {
 
 Matrix Matrix::operator* (Matrix const& other) {
   float result[16];
-
   for(int row = 0; row < dimension; row++){
     for(int col = 0; col < dimension; col++){
-      result[row*dimension + col] = ((*this).array[row*dimension + 0] * other.array[0*dimension + col]) +
-                                    ((*this).array[row*dimension + 1] * other.array[1*dimension + col]) +
-                                    ((*this).array[row*dimension + 2] * other.array[2*dimension + col]) +
-                                    ((*this).array[row*dimension + 3] * other.array[3*dimension + col]);
+      result[row*dimension + col] = ((*this)(row, 0) * other(0, col)) +
+                                    ((*this)(row, 1) * other(1, col)) +
+                                    ((*this)(row, 2) * other(2, col)) +
+                                    ((*this)(row, 3) * other(3, col));
     };
   };
 
@@ -107,10 +107,10 @@ Tuple Matrix::operator* (Tuple const& tuple){
   float result[4];
 
   for(int row = 0; row < dimension; row++){
-      result[row] = ((*this).array[row*dimension + 0] * tuple.x) +
-                                    ((*this).array[row*dimension + 1] * tuple.y) +
-                                    ((*this).array[row*dimension + 2] * tuple.z) +
-                                    ((*this).array[row*dimension + 3] * tuple.w);
+      result[row] = ((*this)(row, 0) * tuple.x) +
+                    ((*this)(row, 1) * tuple.y) +
+                    ((*this)(row, 2) * tuple.z) +
+                    ((*this)(row, 3) * tuple.w);
   };
 
   return {result[0], result[1], result[2], result[3]};
@@ -119,7 +119,7 @@ Tuple Matrix::operator* (Tuple const& tuple){
 
 //Out of scope of class
 
-Matrix transpose(Matrix matrix){
+Matrix transpose(Matrix &matrix){
   float result[16];
 
   for(int row = 0; row < 4; row++){
@@ -128,11 +128,38 @@ Matrix transpose(Matrix matrix){
     };
   };
 
-  
   return  { 
             result[0], result[1], result[2], result[3],
             result[4], result[5], result[6], result[7],
             result[8], result[9], result[10], result[11],
             result[12], result[13], result[14], result[15],
           };
+};
+
+float determinant(Matrix &matrix){
+    return matrix.array[0]*matrix.array[3] - matrix.array[1]*matrix.array[2];    
+};
+
+Matrix subMatrix(Matrix &matrix, int row, int col) {
+  Matrix sub = Matrix(matrix.dimension-1);
+
+  int i_col = 0, i_row = 0;
+  int i = 0;
+
+  while(i < (matrix.dimension-1)*(matrix.dimension-1)) {
+
+    if (col != i_col && row != i_row) {
+       sub.array[i] = matrix(i_row, i_col);
+      i++;
+    }
+
+    if (!(i_col < (matrix.dimension-1))) {
+      i_col = 0;
+      i_row++;
+    } else {
+      i_col++;
+    }
+  }
+
+  return sub;
 };

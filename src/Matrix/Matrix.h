@@ -26,9 +26,12 @@ public:
         float y1, float y2
     );
 
+    //constructs empty matrix with desired dimension. e.g 4 -> 4x4
+    Matrix(int dimension); 
+
     //Operator overloads
     float& operator() (int row, int col); 
-    float  operator() (int row, int col) const;
+    float&  operator() (int row, int col) const;
 
     bool operator== (Matrix const& other);
     bool operator!= (Matrix const& other);
@@ -38,4 +41,8 @@ public:
 };
 
 
-Matrix transpose(Matrix matrix);
+Matrix transpose(Matrix &matrix);
+
+float determinant(Matrix &matrix);
+
+Matrix subMatrix(Matrix &matrix, int row, int column);
