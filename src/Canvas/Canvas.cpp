@@ -8,11 +8,11 @@ Canvas::Canvas(int width, int height) : width(width), height(height), arrayOfPix
 }
 
 Color Canvas::pixelAt(int x, int y) {
-    return arrayOfPixels[height*x + y];
+    return arrayOfPixels[width*y + x];
 }
 
 void Canvas::writePixel(int x, int y, Color const& color){
-    arrayOfPixels[height*x + y] = color;
+    arrayOfPixels[width*y + x] = color;
 };
 
 void Canvas::fill(Color const& color){

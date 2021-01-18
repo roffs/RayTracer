@@ -57,6 +57,8 @@ TEST_F(Tuple_test, tuple_equal_operator_overload){
 
     ASSERT_TRUE(tuple1 == tuple2);
     ASSERT_FALSE(tuple1 == tuple3);
+    ASSERT_FALSE(tuple1 != tuple2);
+    ASSERT_TRUE(tuple1 != tuple3);
 }
 
 TEST_F(Tuple_test, point_plus_vector_gives_point){

@@ -7,6 +7,7 @@ set(Sources
 	Tuple/Tuple.cpp
 	Color/Color.cpp
 	Canvas/Canvas.cpp
+	Matrix/Matrix.cpp
 	)
 
 add_executable(${This} ${Sources})
@@ -15,4 +16,5 @@ target_include_directories(${This} PUBLIC
 	Tuple
 	Color
 	Canvas
+	Matrix
 )

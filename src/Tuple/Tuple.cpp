@@ -16,6 +16,10 @@ bool Tuple::operator== (Tuple const& other){
     return (x == other.x) && (y == other.y) && (z == other.z) && (w == other.w);
 }
 
+bool Tuple::operator!= (Tuple const& other){
+    return !(*this == other);
+};
+
 Tuple Tuple::operator+ (Tuple const& other){
     return {x + other.x, y + other.y, z + other.z, w + other.w};
 }

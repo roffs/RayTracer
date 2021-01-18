@@ -11,6 +11,7 @@ public:
 
     //Operator overloads
     bool operator== (Tuple const& other);
+    bool operator!= (Tuple const& other);
     Tuple operator+ (Tuple const& other);
     Tuple operator- (Tuple const& other);
     Tuple operator- ();
