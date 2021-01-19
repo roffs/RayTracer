@@ -46,3 +46,7 @@ Matrix transpose(Matrix &matrix);
 float determinant(Matrix &matrix);
 
 Matrix subMatrix(Matrix &matrix, int row, int column);
+
+float minor(Matrix &matrix, int row, int column);
+
+float cofactor(Matrix &matrix, int row, int column);

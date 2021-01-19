@@ -195,7 +195,7 @@ TEST(Matrix_test, 2x2_matrix_determinant) {
     ASSERT_EQ(det, 17);
 }
 
-TEST(Matrix_test, submatrix_returns_the_matrix_with_removed_row_and_column) {
+TEST(Matrix_test, submatrix_of_3x3_matrix_returns_the_matrix_with_removed_row_and_column) {
     Matrix matrix(
         1.0f, 5.0f, 0.0f,
         -3.0f, 2.0f, 7.0f,
@@ -208,4 +208,64 @@ TEST(Matrix_test, submatrix_returns_the_matrix_with_removed_row_and_column) {
     ASSERT_EQ(result(0, 1), 2.0f);
     ASSERT_EQ(result(1, 0), 0.0f);
     ASSERT_EQ(result(1, 1), 6.0f);
+}
+
+
+TEST(Matrix_test, submatrix_of_4x4_matrix_returns_the_matrix_with_removed_row_and_column) {
+    Matrix matrix(
+        -6.0f, 1.0f, 1.0f, 6.0f,
+        -8.0f, 5.0f, 8.0f, 6.0f,
+        -1.0f, 0.0f, 8.0f, 2.0f,
+        -7.0f, 1.0f, -1.0f, 1.0f
+    );
+
+    Matrix result = subMatrix(matrix, 2, 1);
+
+    ASSERT_EQ(result(0, 0), -6.0f);
+    ASSERT_EQ(result(0, 1), 1.0f);
+    ASSERT_EQ(result(0, 2), 6.0f);
+
+    ASSERT_EQ(result(1, 0), -8.0f);
+    ASSERT_EQ(result(1, 1), 8.0f);
+    ASSERT_EQ(result(1, 2), 6.0f);
+
+    ASSERT_EQ(result(2, 0), -7.0f);
+    ASSERT_EQ(result(2, 1), -1.0f);
+    ASSERT_EQ(result(2, 2), 1.0f);
+}
+
+TEST(Matrix_test, minor_returns_the_determinant_of_the_submatrix_at_x_y) {
+    Matrix matrix(
+        3.0f, 5.0f, 0.0f,
+        2.0f, -1.0f, -7.0f,
+        6.0f, -1.0f, 5.0
+    );
+
+    Matrix submatrix = subMatrix(matrix, 1, 0);
+
+    float det = determinant(submatrix);
+    float min = minor(matrix, 1, 0);
+
+    ASSERT_EQ(det, 25.0f);
+    ASSERT_EQ(min, 25);
+}
+
+TEST(Matrix_test, cofactor_returns_the_minor_of_the_submatrix_at_row_col_with_correct_sign) {
+    Matrix matrix(
+        3.0f, 5.0f, 0.0f,
+        2.0f, -1.0f, -7.0f,
+        6.0f, -1.0f, 5.0
+    );
+
+    float minor1 = minor(matrix, 0, 0);
+    float cofactor1 = cofactor(matrix, 0, 0);
+
+    float minor2 = minor(matrix, 1, 0);
+    float cofactor2 = cofactor(matrix, 1, 0);
+
+    ASSERT_EQ(minor1, -12.0f);
+    ASSERT_EQ(cofactor1, -12.0f);
+
+    ASSERT_EQ(minor2, 25.0f);
+    ASSERT_EQ(cofactor2, -25.0f);    
 }

@@ -163,3 +163,14 @@ Matrix subMatrix(Matrix &matrix, int row, int col) {
 
   return sub;
 };
+
+float minor(Matrix &matrix, int row, int column) {
+  Matrix submatrix = subMatrix(matrix, row, column);
+  return determinant(submatrix);
+};
+
+float cofactor(Matrix &matrix, int row, int column) {
+  float min = minor(matrix, row, column);
+  int sign = row+column % 2 == 0 ? 1 : -1;
+  return sign*min;
+};
