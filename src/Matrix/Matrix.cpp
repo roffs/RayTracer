@@ -1,4 +1,5 @@
 #include "Matrix.h"
+#include <iostream>
 
 Matrix::Matrix(
   float x1, float x2, float x3, float x4,
@@ -74,7 +75,7 @@ bool Matrix::operator== (Matrix const& other) {
   if (dimension != other.dimension) { return false; }
   
   for(int i = 0; i < (dimension*dimension)-1; i++) {
-    if(array[i] != other.array[i]) { return false; }
+    if(array[i] - other.array[i] > 0.0001) { return false; }
   }
 
   return true;
@@ -116,10 +117,20 @@ Tuple Matrix::operator* (Tuple const& tuple){
   return {result[0], result[1], result[2], result[3]};
 };
 
+ Matrix Matrix::operator* (float const& scalar) {
+   Matrix result(dimension);
+   for (int i = 0; i < dimension; i++){
+     for (int j = 0; j < dimension; j++){
+       result(i, j) = (*this)(i, j) * scalar;
+     }
+   }
+   return result;
+ };
+
 
 //Out of scope of class
 
-Matrix transpose(Matrix &matrix){
+Matrix transpose(Matrix const& matrix){
   float result[16];
 
   for(int row = 0; row < 4; row++){
@@ -136,12 +147,21 @@ Matrix transpose(Matrix &matrix){
           };
 };
 
-float determinant(Matrix &matrix){
-    return matrix.array[0]*matrix.array[3] - matrix.array[1]*matrix.array[2];    
+float determinant(Matrix const& matrix){
+  float det = 0;
+  if (matrix.dimension == 2) {
+    det = matrix.array[0]*matrix.array[3] - matrix.array[1]*matrix.array[2];    
+  }
+  else {
+    for (int i = 0; i < matrix.dimension; i++) {
+      det += matrix(0, i)*cofactor(matrix, 0, i);
+    }
+  }
+  return det;    
 };
 
-Matrix subMatrix(Matrix &matrix, int row, int col) {
-  Matrix sub = Matrix(matrix.dimension-1);
+Matrix subMatrix(Matrix const& matrix, int row, int col) {
+  Matrix sub{matrix.dimension-1};
 
   int i_col = 0, i_row = 0;
   int i = 0;
@@ -164,13 +184,29 @@ Matrix subMatrix(Matrix &matrix, int row, int col) {
   return sub;
 };
 
-float minor(Matrix &matrix, int row, int column) {
-  Matrix submatrix = subMatrix(matrix, row, column);
-  return determinant(submatrix);
+float minor(Matrix const& matrix, int row, int column) {
+  return determinant(subMatrix(matrix, row, column));
 };
 
-float cofactor(Matrix &matrix, int row, int column) {
+float cofactor(Matrix const& matrix, int row, int column) {
   float min = minor(matrix, row, column);
-  int sign = row+column % 2 == 0 ? 1 : -1;
+  int sign = (row+column) % 2 == 0 ? 1 : -1;
   return sign*min;
+};
+
+bool isInvertible(Matrix const& matrix) {
+  return determinant(matrix) != 0;
+};
+
+Matrix inverse(Matrix const& matrix) {
+  Matrix inv = Matrix(matrix.dimension);
+  float det = determinant(matrix);
+
+  for (int i = 0; i < matrix.dimension; i++){
+    for (int j = 0; j < matrix.dimension; j++){
+      inv(j, i) = cofactor(matrix, i, j) / det;
+    }
+  }
+
+  return inv;
 };

@@ -1,5 +1,7 @@
 #include <gtest/gtest.h>
 
+#include <iostream>
+
 #include "Matrix.h"
 #include "Tuple.h"
 
@@ -169,6 +171,37 @@ TEST(Matrix_test, multiplication_matrix_by_tuple) {
     ASSERT_EQ(result.w, 1.0f);
 }
 
+TEST(Matrix_test, multiplication_matrix_by_float) {
+    Matrix matrix(
+        1.0f, 2.0f, 3.0f, 4.0f,
+        2.0f, 4.0f, 4.0f, 2.0f,
+        8.0f, 6.0f, 4.0f, 1.0f,
+        0.0f, 0.0f, 0.0f, 1.0f
+    );
+
+    Matrix result = matrix * 2.0f;
+
+    ASSERT_EQ(result(0, 0), 2.0f);
+    ASSERT_EQ(result(0, 1), 4.0f);
+    ASSERT_EQ(result(0, 2), 6.0f);
+    ASSERT_EQ(result(0, 3), 8.0f);
+
+    ASSERT_EQ(result(1, 0), 4.0f);
+    ASSERT_EQ(result(1, 1), 8.0f);
+    ASSERT_EQ(result(1, 2), 8.0f);
+    ASSERT_EQ(result(1, 3), 4.0f);
+
+    ASSERT_EQ(result(2, 0), 16.0f);
+    ASSERT_EQ(result(2, 1), 12.0f);
+    ASSERT_EQ(result(2, 2), 8.0f);
+    ASSERT_EQ(result(2, 3), 2.0f);
+
+    ASSERT_EQ(result(3, 0), 0.0f);
+    ASSERT_EQ(result(3, 1), 0.0f);
+    ASSERT_EQ(result(3, 2), 0.0f);
+    ASSERT_EQ(result(3, 3), 2.0f);
+}
+
 TEST(Matrix_test, transposing_matrix) {
     Matrix matrix(
         0.0f, 9.0f, 3.0f, 0.0f,
@@ -191,8 +224,8 @@ TEST(Matrix_test, transposing_matrix) {
 
 TEST(Matrix_test, 2x2_matrix_determinant) {
     Matrix matrix(1.0f, 5.0f, -3.0f, 2.0f);
-    float det = determinant(matrix);
-    ASSERT_EQ(det, 17);
+
+    ASSERT_EQ(determinant(matrix), 17);
 }
 
 TEST(Matrix_test, submatrix_of_3x3_matrix_returns_the_matrix_with_removed_row_and_column) {
@@ -243,11 +276,8 @@ TEST(Matrix_test, minor_returns_the_determinant_of_the_submatrix_at_x_y) {
 
     Matrix submatrix = subMatrix(matrix, 1, 0);
 
-    float det = determinant(submatrix);
-    float min = minor(matrix, 1, 0);
-
-    ASSERT_EQ(det, 25.0f);
-    ASSERT_EQ(min, 25);
+    ASSERT_EQ(determinant(submatrix), 25.0f);
+    ASSERT_EQ(minor(matrix, 1, 0), 25);
 }
 
 TEST(Matrix_test, cofactor_returns_the_minor_of_the_submatrix_at_row_col_with_correct_sign) {
@@ -257,15 +287,106 @@ TEST(Matrix_test, cofactor_returns_the_minor_of_the_submatrix_at_row_col_with_co
         6.0f, -1.0f, 5.0
     );
 
-    float minor1 = minor(matrix, 0, 0);
-    float cofactor1 = cofactor(matrix, 0, 0);
+    ASSERT_EQ(minor(matrix, 0, 0), -12.0f);
+    ASSERT_EQ(cofactor(matrix, 0, 0), -12.0f);
 
-    float minor2 = minor(matrix, 1, 0);
-    float cofactor2 = cofactor(matrix, 1, 0);
+    ASSERT_EQ(minor(matrix, 1, 0), 25.0f);
+    ASSERT_EQ(cofactor(matrix, 1, 0), -25.0f);    
+}
 
-    ASSERT_EQ(minor1, -12.0f);
-    ASSERT_EQ(cofactor1, -12.0f);
+TEST(Matrix_test, 3x3_matrix_determinant) {
+    Matrix matrix(
+        1.0f, 2.0f, 6.0f,
+        -5.0f, 8.0f, -4.0f,
+        2.0f, 6.0f, 4.0f
+    );
 
-    ASSERT_EQ(minor2, 25.0f);
-    ASSERT_EQ(cofactor2, -25.0f);    
+    ASSERT_EQ(cofactor(matrix, 0, 0), 56.0f);
+    ASSERT_EQ(cofactor(matrix, 0, 1), 12.0f);
+    ASSERT_EQ(cofactor(matrix, 0, 2), -46.0f);
+    ASSERT_EQ(determinant(matrix), -196.0f);
+}
+
+TEST(Matrix_test, 4x4_matrix_determinant) {
+    Matrix matrix(
+        -2.0f, -8.0f, 3.0f, 5.0f, 
+        -3.0f, 1.0f, 7.0f, 3.0f,
+        1.0f, 2.0f, -9.0f, 6.0f,
+        -6.0f, 7.0f, 7.0f, -9.0f
+    );
+
+    ASSERT_EQ(cofactor(matrix, 0, 0), 690.0f);
+    ASSERT_EQ(cofactor(matrix, 0, 1), 447.0f);
+    ASSERT_EQ(cofactor(matrix, 0, 2), 210.0f);
+    ASSERT_EQ(cofactor(matrix, 0, 3), 51.0f);
+    ASSERT_EQ(determinant(matrix), -4071.0f);
+}
+
+TEST(Matrix_test, check_matrix_is_invertible_when_det_is_not_zero) {
+    Matrix matrix(
+        -2.0f, -8.0f, 3.0f, 5.0f, 
+        -3.0f, 1.0f, 7.0f, 3.0f,
+        1.0f, 2.0f, -9.0f, 6.0f,
+        -6.0f, 7.0f, 7.0f, -9.0f
+    );
+
+    ASSERT_EQ(determinant(matrix), -4071.0f);
+    ASSERT_TRUE(isInvertible(matrix));
+}
+
+TEST(Matrix_test, check_matrix_is_not_invertible_when_det_is_zero) {
+    Matrix matrix(
+        -4.0f, 2.0f, -2.0f, -3.0f, 
+        9.0f, 6.0f, 2.0f, 6.0f,
+        0.0f, -5.0f, 1.0f, -5.0f,
+        0.0f, 0.0f, 0.0f, 0.0f
+    );
+
+    ASSERT_EQ(determinant(matrix), 0.0f);
+    ASSERT_FALSE(isInvertible(matrix));
+}
+
+
+TEST(Matrix_test, calculate_the_inverse_of_a_matrix) {
+    Matrix matrix(
+        -5.0f, 2.0f, 6.0f, -8.0f, 
+        1.0f, -5.0f, 1.0f, 8.0f,
+        7.0f, 7.0f, -6.0f, -7.0f,
+        1.0f, -3.0f, 7.0f, 4.0f
+    );
+
+    Matrix inv = inverse(matrix);
+
+    Matrix result(
+         0.21805f, 0.45113f, 0.24060f, -0.04511f,
+        -0.80827f, -1.45677f, -0.44361f, 0.52068f,
+        -0.07895f, -0.22368f, -0.05263f, 0.19737f,
+        -0.52256f, -0.81391f, -0.30075f, 0.30639f
+    );
+
+    ASSERT_EQ(determinant(matrix), 532.0f);
+    ASSERT_EQ(cofactor(matrix, 2, 3), -160.0f);
+    ASSERT_TRUE(inv(3, 2) - (-160.0f/532.0f) < 0.0001);
+    ASSERT_EQ(cofactor(matrix, 3, 2), 105.0f);
+    ASSERT_TRUE(inv(2, 3) - (105.0f/532.0f) < 0.0001);
+}
+
+TEST(Matrix_test, multiply_a_product_by_its_inverse) {
+    Matrix A(
+        3.0f, -9.0f, 7.0f, 3.0f, 
+        3.0f, -8.0f, 2.0f, -9.0f,
+        -4.0f, 4.0f, 4.0f, 1.0f,
+        -6.0f, 5.0f, -1.0f, 1.0f
+    );
+
+    Matrix B(
+        8.0f, 2.0f, 2.0f, 2.0f, 
+        3.0f, -1.0f, 7.0f, 0.0f,
+        7.0f, 0.0f, 5.0f, 4.0f,
+        6.0f, -2.0f, 0.0f, 5.0f
+    );
+
+    Matrix C = A * B;
+
+    ASSERT_TRUE(C*inverse(B) == A);    
 }

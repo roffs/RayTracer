@@ -38,15 +38,20 @@ public:
 
     Matrix operator* (Matrix const& other);
     Tuple operator* (Tuple const& tuple);
+    Matrix operator* (float const& scalar);
 };
 
 
-Matrix transpose(Matrix &matrix);
+Matrix transpose(Matrix const& matrix);
 
-float determinant(Matrix &matrix);
+float determinant(Matrix const& matrix);
 
-Matrix subMatrix(Matrix &matrix, int row, int column);
+Matrix subMatrix(Matrix const& matrix, int row, int column);
 
-float minor(Matrix &matrix, int row, int column);
+float minor(Matrix const& matrix, int row, int column);
 
-float cofactor(Matrix &matrix, int row, int column);
+float cofactor(Matrix const& matrix, int row, int column);
+
+bool isInvertible(Matrix const& matrix);
+
+Matrix inverse(Matrix const& matrix);
