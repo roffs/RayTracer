@@ -7,19 +7,19 @@
 #include "Tuple.h"
 
 TEST(Intersection_test, intersection_encapsulates_surface_and_t) {
-    Surface sphere;
+    Sphere sphere;
 
     float t(3.5f);
 
     Intersection intersection(sphere, t);
 
     ASSERT_TRUE(intersection.t == t);
-    ASSERT_TRUE(intersection.surface == sphere);
+    ASSERT_TRUE(intersection.sphere == sphere);
 }
 
 
 TEST(Intersection_test, aggregating_intersections) {
-    Surface sphere;
+    Sphere sphere;
 
     float t1(1.0f);
     float t2(2.0f);
@@ -78,4 +78,3 @@ TEST(Intersection_test, returns_lowest_nonnegative_intersection) {
     Intersection i = hit(intersections);
     ASSERT_TRUE(i == i4);
 }
-

@@ -14,7 +14,10 @@ Tuple Tuple::Vector(float x, float y, float z){
 };
 
 bool Tuple::operator== (Tuple const& other) const {
-    return (x - other.x < 0.0001) && (y - other.y < 0.0001) && (z - other.z < 0.0001) && (w - other.w < 0.0001);
+    return  ((x - other.x) < 0.0001 && (x - other.x) > -0.0001) && 
+            ((y - other.y) < 0.0001 && (y - other.y) > -0.0001) && 
+            ((z - other.z) < 0.0001 && (z - other.z) > -0.0001) && 
+            ((w - other.w) < 0.0001 && (w - other.w) > -0.0001);
 }
 
 bool Tuple::operator!= (Tuple const& other) const {

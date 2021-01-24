@@ -17,6 +17,17 @@ TEST_F(Color_test, color_is_constructed_from_rgb){
     ASSERT_EQ(color.blue, blue1);
 }
 
+TEST_F(Color_test, color_may_be_reassigned){
+    Color color{red1, green1, blue1};
+    Color otherColor{0.0f, 1.0f, 0.0f};
+
+    color = otherColor;
+
+    ASSERT_EQ(color.red, 0.0f);
+    ASSERT_EQ(color.green, 1.0f);
+    ASSERT_EQ(color.blue, 0.0f);
+}
+
 TEST_F(Color_test, color_rgb_variables_are_references_to_xyz){
     Color color{red1, green1, blue1};
 

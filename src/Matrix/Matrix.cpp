@@ -1,5 +1,6 @@
 #include "Matrix.h"
 #include <iostream>
+#include <cmath>
 
 Matrix::Matrix(
   float x1, float x2, float x3, float x4,
@@ -77,7 +78,7 @@ bool Matrix::operator== (Matrix const& other) const {
   if (dimension != other.dimension) { return false; }
   
   for(int i = 0; i < (dimension*dimension)-1; i++) {
-    if(array[i] - other.array[i] > 0.0001) { return false; }
+    if((array[i] - other.array[i]) > 0.0001 || (array[i] - other.array[i]) < -0.0001) { return false; }
   }
 
   return true;

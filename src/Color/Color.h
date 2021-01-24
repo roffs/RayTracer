@@ -11,10 +11,10 @@ public:
     Color(float x = 0.0f, float y = 0.0f, float z = 0.0f);
 
     //Operator overloads
-    bool operator== (Color const& other);
+    bool operator== (Color const& other) const;
     void operator= (Color const& other);
-    Color operator+ (Color const& other);
-    Color operator- (Color const& other);
-    Color operator* (float const& scalar);
-    Color operator* (Color const& other);
+    Color operator+ (Color const& other) const;
+    Color operator- (Color const& other) const;
+    Color operator* (float const& scalar) const;
+    Color operator* (Color const& other) const;
 };

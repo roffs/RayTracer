@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 
 #include <iostream>
+#include <cmath>
 
 #include "Matrix.h"
 #include "Tuple.h"
@@ -366,9 +367,9 @@ TEST(Matrix_test, calculate_the_inverse_of_a_matrix) {
 
     ASSERT_EQ(determinant(matrix), 532.0f);
     ASSERT_EQ(cofactor(matrix, 2, 3), -160.0f);
-    ASSERT_TRUE(inv(3, 2) - (-160.0f/532.0f) < 0.0001);
+    ASSERT_TRUE(abs(inv(3, 2) - (-160.0f/532.0f)) < 0.0001);
     ASSERT_EQ(cofactor(matrix, 3, 2), 105.0f);
-    ASSERT_TRUE(inv(2, 3) - (105.0f/532.0f) < 0.0001);
+    ASSERT_TRUE(abs(inv(2, 3) - (105.0f/532.0f)) < 0.0001);
 }
 
 TEST(Matrix_test, multiply_a_product_by_its_inverse) {

@@ -14,6 +14,7 @@ set(Sources
 	Intersection/Intersection.cpp
 	Surface/Surface.cpp
 	Light/Light.cpp
+	Material/Material.cpp
 	)
 
 add_executable(${This} ${Sources})
@@ -29,4 +30,5 @@ target_include_directories(${This} PUBLIC
 	Intersection
 	Surface
 	Light
+	Material
 )

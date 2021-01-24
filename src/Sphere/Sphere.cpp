@@ -6,12 +6,12 @@ Sphere::Sphere() {
     transform = identity(4);
 }
 
-void Sphere::setTransformation(Matrix newTransform) {
+void Sphere::setTransformation(Matrix const &newTransform) {
     transform = newTransform;
 };
 
 
-Tuple Sphere::normal(Tuple worldPoint) {
+Tuple Sphere::normal(Tuple const &worldPoint) {
     Tuple objectPoint = inverse(transform) * worldPoint;
     Tuple objectOrigin = Tuple::Point(0.0f, 0.0f, 0.0f);
 

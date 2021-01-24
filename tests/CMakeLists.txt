@@ -13,6 +13,7 @@ set(Sources
 	Intersection_test.cpp
 	Surface_test.cpp
 	Light_test.cpp
+	Material_test.cpp
 	../src/Tuple/Tuple.cpp
 	../src/Color/Color.cpp
 	../src/Canvas/Canvas.cpp
@@ -23,6 +24,7 @@ set(Sources
 	../src/Intersection/Intersection.cpp
 	../src/Surface/Surface.cpp
 	../src/Light/Light.cpp
+	../src/Material/Material.cpp
 	)
 
 add_executable(${This} ${Sources})
@@ -42,6 +44,7 @@ target_include_directories(${This} PUBLIC
 	../src/Intersection
 	../src/Surface
 	../src/Light
+	../src/Material
 )
 
 add_test(

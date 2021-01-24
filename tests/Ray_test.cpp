@@ -92,8 +92,8 @@ TEST(Ray_test, ray_with_origin_inside_sphere_intersects_with_it) {
 
     ASSERT_EQ(intersection[0].t, -1.0f);
     ASSERT_EQ(intersection[1].t, 1.0f);
-    ASSERT_TRUE(intersection[0].surface == sphere);
-    ASSERT_TRUE(intersection[1].surface == sphere);
+    ASSERT_TRUE(intersection[0].sphere == sphere);
+    ASSERT_TRUE(intersection[1].sphere == sphere);
 }
 
 TEST(Ray_test, translating_a_ray) {

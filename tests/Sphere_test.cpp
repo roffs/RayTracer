@@ -6,6 +6,7 @@
 #include "Tuple.h"
 #include "Matrix.h"
 #include "Transformations.h"
+#include "Material.h"
 
 TEST(Sphere_test, construct_default_sphere) {
     Tuple center = Tuple::Point(0.0f, 0.0f, 0.0f);
@@ -91,4 +92,23 @@ TEST(Sphere_test, calculate_normal_on_a_transformedsphere) {
     Tuple expected = Tuple::Vector(0.0f, 0.97014f, -0.24254);
     
     ASSERT_TRUE(n == expected);
+}
+
+TEST(Sphere_test, sphere_has_a_default_material) {
+    Sphere sphere;
+
+    Material defaultMaterial;
+
+    ASSERT_TRUE(sphere.material == defaultMaterial);
+}
+
+TEST(Sphere_test, a_sphere_may_be_assigned_a_material) {
+    Sphere sphere;
+
+    Material material;
+    material.ambient = 1.0f;
+
+    sphere.material = material;
+
+    ASSERT_TRUE(sphere.material == material);
 }

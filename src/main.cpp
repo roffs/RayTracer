@@ -7,35 +7,48 @@
 
 int main()
 {
-
+	//define canvas and its distance to the camera
 	int pixels = 800;
 	Canvas canvas(pixels, pixels);
-	Color red(1.0f, 0.0f, 0.0f);
 
 	Tuple rayOrigin = Tuple::Point(0.0f, 0.0f, -5.0f);
 	float wallZ = 10.0f;
-	
-	Sphere sphere;
 
 	float wallSize = 7.0f;
 	float pixelSize = wallSize / pixels;
 
 	float half = wallSize / 2;
+		
+	//define sphere in the scene
+	Sphere sphere;
+	Color pink(1.0f, 0.2f, 1.0f);
+	sphere.material.color = pink;
 
+	//define light source
+	Tuple lightPosition = Tuple::Point(-10.0f, 10.0f, -10.0f);
+	Color lightColor(1.0f, 1.0f, 1.0f);
+	Light light(lightPosition, lightColor);
+
+	//compute color for each pixel
 	for(int y = 0; y < pixels; y++) {
 		float worldY = half - (pixelSize*y);
 
 		for(int x = 0; x < pixels; x++) {
 			float worldX = half - (pixelSize*x);
 			
-			Tuple position = Tuple::Point(worldX, worldY, wallZ);
-			Ray ray(rayOrigin, normalize(position - rayOrigin));
+			Tuple pos = Tuple::Point(worldX, worldY, wallZ);
+			Ray ray(rayOrigin, normalize(pos - rayOrigin));
 
 			Intersection* intersection = intersects(ray, sphere);
 			std::vector<Intersection> intersections = {intersection[0], intersection[1]};
 
-			if (hit(intersections).t != std::numeric_limits<float>::infinity()) {
-				canvas.writePixel(x, y, red);
+			Intersection currentHit = hit(intersections);
+			if (currentHit.t != std::numeric_limits<float>::infinity()) {
+				Tuple point = position(ray, currentHit.t);
+				Tuple normal = currentHit.sphere.normal(point);
+				Tuple eyeDirection = -ray.direction;
+				Color finalColor = lighting(currentHit.sphere.material, light, point, eyeDirection, normal);
+				canvas.writePixel(x, y, finalColor);
 			}
 		}
 	}

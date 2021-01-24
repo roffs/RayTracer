@@ -2,14 +2,14 @@
 
 #include <vector>
 
-#include "Surface.h"
+#include "Sphere.h"
 
 class Intersection {
 public:
-    Surface surface;
+    Sphere sphere;
     float t; 
 
-    Intersection(Surface surface, float t);
+    Intersection(Sphere const &sphere, float const &t);
     Intersection();
 
     bool operator==(Intersection const& other);
