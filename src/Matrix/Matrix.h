@@ -29,18 +29,21 @@ public:
     //constructs empty matrix with desired dimension. e.g 4 -> 4x4
     Matrix(int dimension); 
 
+    Matrix();
+
     //Operator overloads
     float& operator() (int row, int col); 
     float&  operator() (int row, int col) const;
 
-    bool operator== (Matrix const& other);
-    bool operator!= (Matrix const& other);
+    bool operator== (Matrix const& other) const;
+    bool operator!= (Matrix const& other) const;
 
-    Matrix operator* (Matrix const& other);
-    Tuple operator* (Tuple const& tuple);
-    Matrix operator* (float const& scalar);
+    Matrix operator* (Matrix const& other) const;
+    Tuple operator* (Tuple const& tuple) const;
+    Matrix operator* (float const& scalar) const;
 };
 
+Matrix identity(int const& dimension); //returns a identity matrix with specified dimension
 
 Matrix transpose(Matrix const& matrix);
 

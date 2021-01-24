@@ -172,3 +172,23 @@ TEST_F(Tuple_test, cross_should_return_cross_product_of_vector){
 
     ASSERT_TRUE(result == expected);
 }
+
+TEST_F(Tuple_test, reflects_a_vector_approaching_at_45_deg) {
+    Tuple v = Tuple::Vector(1.0f, -1.0f, 0.0f);
+    Tuple n = Tuple::Vector(0.0f, 1.0f, 0.0f);
+
+    Tuple r = reflect(v, n);
+
+    Tuple expected = Tuple::Vector(1.0f, 1.0f, 0.0f);
+    ASSERT_TRUE(r == expected);
+}
+
+TEST_F(Tuple_test, reflects_a_vector_off_a_slanted_surface) {
+    Tuple v = Tuple::Vector(0.0f, -1.0f, 0.0f);
+    Tuple n = Tuple::Vector(sqrt(2.0f)/2.0f, sqrt(2.0f)/2.0f, 0.0f);
+
+    Tuple r = reflect(v, n);
+
+    Tuple expected = Tuple::Vector(1.0f, 0.0f, 0.0f);
+    ASSERT_TRUE(r == expected);
+}

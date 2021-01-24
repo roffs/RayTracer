@@ -59,6 +59,8 @@ Matrix::Matrix(
 
 Matrix::Matrix(int dimension) : array{new float[dimension*dimension]}, dimension{dimension} {};
 
+Matrix::Matrix() {};
+
 //Operator overloads
 
 float& Matrix::operator() (int x, int y)
@@ -71,7 +73,7 @@ float& Matrix::operator() (int x, int y) const
   return array[x*dimension + y];
 };
 
-bool Matrix::operator== (Matrix const& other) {
+bool Matrix::operator== (Matrix const& other) const {
   if (dimension != other.dimension) { return false; }
   
   for(int i = 0; i < (dimension*dimension)-1; i++) {
@@ -81,11 +83,11 @@ bool Matrix::operator== (Matrix const& other) {
   return true;
 };
 
-bool Matrix::operator!= (Matrix const& other) {
+bool Matrix::operator!= (Matrix const& other) const {
   return !(*this == other);
 };
 
-Matrix Matrix::operator* (Matrix const& other) {
+Matrix Matrix::operator* (Matrix const& other) const {
   float result[16];
   for(int row = 0; row < dimension; row++){
     for(int col = 0; col < dimension; col++){
@@ -104,7 +106,7 @@ Matrix Matrix::operator* (Matrix const& other) {
           };
 };
 
-Tuple Matrix::operator* (Tuple const& tuple){
+Tuple Matrix::operator* (Tuple const& tuple) const{
   float result[4];
 
   for(int row = 0; row < dimension; row++){
@@ -117,7 +119,7 @@ Tuple Matrix::operator* (Tuple const& tuple){
   return {result[0], result[1], result[2], result[3]};
 };
 
- Matrix Matrix::operator* (float const& scalar) {
+ Matrix Matrix::operator* (float const& scalar) const {
    Matrix result(dimension);
    for (int i = 0; i < dimension; i++){
      for (int j = 0; j < dimension; j++){
@@ -130,12 +132,28 @@ Tuple Matrix::operator* (Tuple const& tuple){
 
 //Out of scope of class
 
+Matrix identity(int const& dimension){
+  Matrix result(dimension);
+
+  for(int row = 0; row < dimension; row++){
+    for(int col = 0; col < dimension; col++){
+      if (col == row) {
+        result(col, row) = 1;
+      } else {
+        result(col, row) = 0;
+      }
+    };
+  };
+
+  return result;
+}; 
+
 Matrix transpose(Matrix const& matrix){
   float result[16];
 
   for(int row = 0; row < 4; row++){
     for(int col = 0; col < 4; col++){
-      result[row*4 + col] = matrix.array[col*4 + row];
+      result[row*4 + col] = matrix.array[col*4 + row]; //TODO: change
     };
   };
 

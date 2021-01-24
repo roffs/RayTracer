@@ -1,5 +1,6 @@
 #include <cmath>
 #include <iostream>
+#include <fstream>
 
 #include "Canvas.h"
 #include "Color.h"
@@ -7,7 +8,7 @@
 Canvas::Canvas(int width, int height) : width(width), height(height), arrayOfPixels(new Color[width*height]){
 }
 
-Color Canvas::pixelAt(int x, int y) {
+Color Canvas::pixelAt(int x, int y) const {
     return arrayOfPixels[width*y + x];
 }
 
@@ -26,7 +27,7 @@ void Canvas::fill(Color const& color){
 
 //Functions outside of the class
 
-std::stringstream canvasToPPM(Canvas &canvas) {
+std::stringstream canvasToPPM(Canvas const &canvas) {
     std::stringstream ppm;
 
     writeHeader(ppm, canvas.width, canvas.height);
@@ -39,7 +40,7 @@ static void writeHeader(std::stringstream &ss, int width, int height){
     ss << "P3\n" << width << " " << height << "\n" << 255 << "\n";   
 };
 
-static void writeBody(std::stringstream &ss, Canvas &canvas){
+static void writeBody(std::stringstream &ss, Canvas const &canvas){
     for(int j = 0; j < canvas.height; j++){
         std::stringstream tmp;
         
@@ -94,4 +95,14 @@ int clamp(float number) {
         number = 255;
     }
     return round(number);
+};
+
+
+void writeFile(Canvas const &canvas, std::string const &title) {
+    std::ofstream file(title + ".ppm");
+    std::stringstream ppm = canvasToPPM(canvas);
+
+    file << ppm.rdbuf();
+
+    file.close();
 };

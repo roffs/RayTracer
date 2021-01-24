@@ -11,16 +11,18 @@ public:
 
     Canvas(int width, int height);
 
-    Color pixelAt(int x, int y);
+    Color pixelAt(int x, int y) const;
 
     void writePixel(int x, int y, Color const& color);
     void fill(Color const& color);
 };
 
-std::stringstream canvasToPPM(Canvas &canvas);
+std::stringstream canvasToPPM(Canvas const &canvas);
 
 static void writeHeader(std::stringstream &ss, int width, int height);
 
-static void writeBody(std::stringstream &ss, Canvas &canvas);
+static void writeBody(std::stringstream &ss, Canvas const &canvas);
 
-int clamp(float number);
+static int clamp(float number);
+
+void writeFile(Canvas const &canvas, std::string const &title);
