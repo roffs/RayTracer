@@ -2,7 +2,12 @@
 #include <iostream>
 #include <cmath>
 
-Color::Color(float x, float y, float z) : Tuple(x, y, z, 0) {
+Color::Color(float x, float y, float z) : Tuple(x, y, z, 0) {};
+
+Color::Color(Color const &color) {
+    x = color.x; 
+    y = color.y, 
+    z = color.z;
 };
 
 Color Color::operator+ (Color const& other) const {

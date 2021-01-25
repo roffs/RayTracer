@@ -3,7 +3,7 @@
 #include "Matrix.h"
 #include "Material.h"
 
-class Surface {
+class Object {
 public:
     int id;
     static int currentId; 
@@ -11,11 +11,11 @@ public:
     Matrix transform;
     Material material;
     
-    Surface();
+    Object();
 
     //operator overload
-    bool operator==(Surface const& other);
-    void operator=(Surface const& other);
+    bool operator==(Object const& other);
+    void operator=(Object const& other);
 
     void setTransformation(Matrix const &transform);
 

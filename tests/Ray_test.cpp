@@ -47,11 +47,10 @@ TEST(Ray_test, ray_intersects_sphere_at_two_points) {
 
     Sphere sphere; 
 
-    Intersection* intersection = intersects(ray, sphere);
+    std::vector<Intersection> intersections = intersects(ray, sphere);
 
-    std::cout << intersection[0].t << std::endl;
-    ASSERT_EQ(intersection[0].t, 4.0f);
-    ASSERT_EQ(intersection[1].t, 6.0f);
+    ASSERT_EQ(intersections[0].t, 4.0f);
+    ASSERT_EQ(intersections[1].t, 6.0f);
 }
 
 TEST(Ray_test, ray_intersects_tangent_sphere) {
@@ -61,10 +60,10 @@ TEST(Ray_test, ray_intersects_tangent_sphere) {
 
     Sphere sphere; 
 
-    Intersection* intersection = intersects(ray, sphere);
+    std::vector<Intersection> intersections = intersects(ray, sphere);
 
-    ASSERT_EQ(intersection[0].t, 5.0f);
-    ASSERT_EQ(intersection[1].t, 5.0f);
+    ASSERT_EQ(intersections[0].t, 5.0f);
+    ASSERT_EQ(intersections[1].t, 5.0f);
 }
 
 TEST(Ray_test, ray_misses_a_sphere) {
@@ -74,11 +73,9 @@ TEST(Ray_test, ray_misses_a_sphere) {
 
     Sphere sphere; 
 
-    Intersection* intersection = intersects(ray, sphere);
+    std::vector<Intersection> intersections = intersects(ray, sphere);
 
-    float inf = std::numeric_limits<float>::infinity();
-    ASSERT_EQ(intersection[0].t, inf);
-    ASSERT_EQ(intersection[1].t, inf);
+    ASSERT_EQ(intersections.size(), 0);
 }
 
 TEST(Ray_test, ray_with_origin_inside_sphere_intersects_with_it) {
@@ -88,12 +85,12 @@ TEST(Ray_test, ray_with_origin_inside_sphere_intersects_with_it) {
 
     Sphere sphere; 
 
-    Intersection* intersection = intersects(ray, sphere);
+    std::vector<Intersection> intersections = intersects(ray, sphere);
 
-    ASSERT_EQ(intersection[0].t, -1.0f);
-    ASSERT_EQ(intersection[1].t, 1.0f);
-    ASSERT_TRUE(intersection[0].surface == &sphere);
-    ASSERT_TRUE(intersection[1].surface == &sphere);
+    ASSERT_EQ(intersections[0].t, -1.0f);
+    ASSERT_EQ(intersections[1].t, 1.0f);
+    ASSERT_TRUE(intersections[0].object == &sphere);
+    ASSERT_TRUE(intersections[1].object == &sphere);
 }
 
 TEST(Ray_test, translating_a_ray) {
@@ -135,10 +132,10 @@ TEST(Ray_test, intersect_a_scaled_sphere_with_a_ray) {
 
     sphere.setTransformation(scaling(2.0f, 2.0f, 2.0f));
 
-    Intersection* intersection = intersects(ray, sphere);
+    std::vector<Intersection> intersections = intersects(ray, sphere);
 
-    ASSERT_EQ(intersection[0].t, 3.0f);
-    ASSERT_EQ(intersection[1].t, 7.0f);
+    ASSERT_EQ(intersections[0].t, 3.0f);
+    ASSERT_EQ(intersections[1].t, 7.0f);
 }
 
 TEST(Ray_test, intersect_a_translated_sphere_with_a_ray) {
@@ -150,9 +147,7 @@ TEST(Ray_test, intersect_a_translated_sphere_with_a_ray) {
 
     sphere.setTransformation(translation(5.0f, 0.0f, 0.0f));
 
-    Intersection* intersection = intersects(ray, sphere);
+    std::vector<Intersection> intersections = intersects(ray, sphere);
 
-    float inf = std::numeric_limits<float>::infinity();
-    ASSERT_EQ(intersection[0].t, inf);
-    ASSERT_EQ(intersection[1].t, inf);
+    ASSERT_EQ(intersections.size(), 0);
 }

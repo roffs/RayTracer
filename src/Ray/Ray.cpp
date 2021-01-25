@@ -11,7 +11,9 @@ Tuple position(Ray &ray, float t) {
     return pos;
 };
 
-Intersection* intersects(Ray &originalRay, Sphere &sphere) {
+std::vector<Intersection> intersects(Ray &originalRay, Sphere &sphere) {
+    std::vector<Intersection> intersections;
+
     Ray ray = transform(originalRay, inverse(sphere.transform));
     Tuple sphereToRay = ray.origin - sphere.center;
 
@@ -22,22 +24,18 @@ Intersection* intersects(Ray &originalRay, Sphere &sphere) {
     float det = (b*b) - (4*a*c);
 
     float t1, t2;
-    if(det < 0) {
-        t1 = std::numeric_limits<float>::infinity();
-        t2 = std::numeric_limits<float>::infinity();
-    } else {
+    if(det >= 0) {
         t1 = (-b - sqrt(det)) / (2*a);
         t2 = (-b + sqrt(det)) / (2*a);
-    } 
-    
-    Intersection int1(sphere, t1);
-    Intersection int2(sphere, t2);
 
-    Intersection* intersection = new Intersection[2];
-    intersection[0] = int1;
-    intersection[1] = int2;
-   
-    return intersection;
+        Intersection int1(sphere, t1);
+        Intersection int2(sphere, t2);
+
+        intersections.push_back(int1);
+        intersections.push_back(int2);
+
+    }    
+    return intersections;
 }; 
 
 

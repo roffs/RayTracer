@@ -11,9 +11,10 @@ set(Sources
 	Ray_test.cpp
 	Sphere_test.cpp
 	Intersection_test.cpp
-	Surface_test.cpp
+	Object_test.cpp
 	Light_test.cpp
 	Material_test.cpp
+	World_test.cpp
 	../src/Tuple/Tuple.cpp
 	../src/Color/Color.cpp
 	../src/Canvas/Canvas.cpp
@@ -22,9 +23,10 @@ set(Sources
 	../src/Ray/Ray.cpp
 	../src/Sphere/Sphere.cpp
 	../src/Intersection/Intersection.cpp
-	../src/Surface/Surface.cpp
+	../src/Object/Object.cpp
 	../src/Light/Light.cpp
 	../src/Material/Material.cpp
+	../src/World/World.cpp
 	)
 
 add_executable(${This} ${Sources})
@@ -42,9 +44,10 @@ target_include_directories(${This} PUBLIC
 	../src/Ray
 	../src/Sphere
 	../src/Intersection
-	../src/Surface
+	../src/Object
 	../src/Light
 	../src/Material
+	../src/World
 )
 
 add_test(

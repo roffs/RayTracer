@@ -1,11 +1,11 @@
 #pragma once
 
-#include "Surface.h"
+#include "Object.h"
 #include "Tuple.h"
 #include "Matrix.h"
 #include "Material.h"
 
-class Sphere : public Surface {
+class Sphere : public Object {
 public: 
     Tuple center;
     float radius;

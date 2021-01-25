@@ -45,7 +45,7 @@ TEST(Material_test, two_materials_are_equal_if_they_have_the_same_properties) {
     ASSERT_FALSE(material1 != material2);
 }
 
-TEST(Lighting_test, lighting_with_the_eye_between_the_light_and_the_surface) {
+TEST(Lighting_test, lighting_with_the_eye_between_the_light_and_the_object) {
     Material material;
     Tuple position = Tuple::Point(0.0f, 0.0f, 0.0f);
 
@@ -62,7 +62,7 @@ TEST(Lighting_test, lighting_with_the_eye_between_the_light_and_the_surface) {
     ASSERT_TRUE(result == expected);
 }
 
-TEST(Lighting_test, lighting_with_the_eye_between_the_light_and_the_surface_with_eye_offset_45_degree) {
+TEST(Lighting_test, lighting_with_the_eye_between_the_light_and_the_object_with_eye_offset_45_degree) {
     Material material;
     Tuple position = Tuple::Point(0.0f, 0.0f, 0.0f);
 
@@ -79,7 +79,7 @@ TEST(Lighting_test, lighting_with_the_eye_between_the_light_and_the_surface_with
     ASSERT_TRUE(result == expected);
 }
 
-TEST(Lighting_test, lighting_with_the_eye_between_the_light_and_the_surface_with_light_offset_45_degree) {
+TEST(Lighting_test, lighting_with_the_eye_between_the_light_and_the_object_with_light_offset_45_degree) {
     Material material;
     Tuple position = Tuple::Point(0.0f, 0.0f, 0.0f);
 
@@ -91,7 +91,6 @@ TEST(Lighting_test, lighting_with_the_eye_between_the_light_and_the_surface_with
     Light light(lightPosition, lightColor);
 
     Color result = lighting(material, light, position, eyeDirection, normal);
-    std::cout << result.red << ", " << result.green << ", " << result.blue << std::endl;
     Color expected(0.7364f, 0.7364f, 0.7364f);
     ASSERT_TRUE(result == expected);
 }
@@ -113,7 +112,7 @@ TEST(Lighting_test, lighting_with_the_eye_in_the_path_of_the_reflection_vector) 
     ASSERT_TRUE(result == expected);
 }
 
-TEST(Lighting_test, lighting_with_the_light_behind_the_surface) {
+TEST(Lighting_test, lighting_with_the_light_behind_the_object) {
     Material material;
     Tuple position = Tuple::Point(0.0f, 0.0f, 0.0f);
 

@@ -14,6 +14,6 @@ public:
 
 Tuple position(Ray &ray, float t);
 
-Intersection* intersects(Ray &ray, Sphere &sphere); 
+std::vector<Intersection> intersects(Ray &ray, Sphere &sphere); 
 
 Ray transform(Ray const& ray, Matrix const& transform);

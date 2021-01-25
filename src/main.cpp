@@ -39,15 +39,14 @@ int main()
 			Tuple pos = Tuple::Point(worldX, worldY, wallZ);
 			Ray ray(rayOrigin, normalize(pos - rayOrigin));
 
-			Intersection* intersection = intersects(ray, sphere);
-			std::vector<Intersection> intersections = {intersection[0], intersection[1]};
+			std::vector<Intersection> intersections = intersects(ray, sphere);
 
 			Intersection currentHit = hit(intersections);
 			if (currentHit.t != std::numeric_limits<float>::infinity()) {
 				Tuple point = position(ray, currentHit.t);
-				Tuple normal = currentHit.surface->normal(point);
+				Tuple normal = currentHit.object->normal(point);
 				Tuple eyeDirection = -ray.direction;
-				Color finalColor = lighting(currentHit.surface->material, light, point, eyeDirection, normal);
+				Color finalColor = lighting(currentHit.object->material, light, point, eyeDirection, normal);
 				canvas.writePixel(x, y, finalColor);
 			}
 		}

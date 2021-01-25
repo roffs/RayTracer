@@ -2,11 +2,11 @@
 #include <limits>
 
 #include "Intersection.h"
-#include "Surface.h"
+#include "Object.h"
 #include "Sphere.h"
 #include "Tuple.h"
 
-TEST(Intersection_test, intersection_encapsulates_surface_and_t) {
+TEST(Intersection_test, intersection_encapsulates_object_and_t) {
     Sphere sphere;
 
     float t(3.5f);
@@ -14,7 +14,7 @@ TEST(Intersection_test, intersection_encapsulates_surface_and_t) {
     Intersection intersection(sphere, t);
 
     ASSERT_TRUE(intersection.t == t);
-    ASSERT_TRUE(intersection.surface == &sphere);
+    ASSERT_TRUE(intersection.object == &sphere);
 }
 
 
@@ -33,7 +33,7 @@ TEST(Intersection_test, aggregating_intersections) {
     ASSERT_EQ(intersections[1].t, t2);
 }
 
-TEST(Intersection_test, hit_returns_first_surface_to_be_hitten_by_the_ray) {
+TEST(Intersection_test, hit_returns_first_object_to_be_hitten_by_the_ray) {
     Sphere sphere; 
 
     Intersection i1(sphere, 1.0f);
@@ -44,7 +44,7 @@ TEST(Intersection_test, hit_returns_first_surface_to_be_hitten_by_the_ray) {
     ASSERT_TRUE(i == i1);
 }
 
-TEST(Intersection_test, hit_returns_first_positive_surface_to_be_hitten_by_the_ray) {
+TEST(Intersection_test, hit_returns_first_positive_object_to_be_hitten_by_the_ray) {
     Sphere sphere; 
 
     Intersection i1(sphere, -1.0f);

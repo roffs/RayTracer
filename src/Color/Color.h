@@ -9,7 +9,8 @@ public:
     float &blue = z;
 
     Color(float x = 0.0f, float y = 0.0f, float z = 0.0f);
-
+    Color(Color const &color);
+    
     //Operator overloads
     bool operator== (Color const& other) const;
     void operator= (Color const& other);

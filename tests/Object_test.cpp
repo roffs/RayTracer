@@ -1,10 +1,10 @@
 #include <gtest/gtest.h>
 
-#include "Surface.h"
+#include "Object.h"
 #include "Sphere.h"
 #include "Tuple.h"
 
-TEST(Surface_test, surface_id_gets_incremented_by_each_one_created) {
+TEST(Object_test, object_id_gets_incremented_by_each_one_created) {
 
     Sphere sphere1;
     Sphere sphere2;

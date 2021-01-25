@@ -2,14 +2,14 @@
 
 #include <vector>
 
-#include "Surface.h"
+#include "Object.h"
 
 class Intersection {
 public:
-    Surface *surface;
+    Object *object;
     float t; 
 
-    Intersection(Surface &surface, float const &t);
+    Intersection(Object &object, float const &t);
     Intersection();
 
     //operators overload

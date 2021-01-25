@@ -183,7 +183,7 @@ TEST_F(Tuple_test, reflects_a_vector_approaching_at_45_deg) {
     ASSERT_TRUE(r == expected);
 }
 
-TEST_F(Tuple_test, reflects_a_vector_off_a_slanted_surface) {
+TEST_F(Tuple_test, reflects_a_vector_off_a_slanted_object) {
     Tuple v = Tuple::Vector(0.0f, -1.0f, 0.0f);
     Tuple n = Tuple::Vector(sqrt(2.0f)/2.0f, sqrt(2.0f)/2.0f, 0.0f);
 

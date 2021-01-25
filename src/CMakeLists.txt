@@ -12,9 +12,10 @@ set(Sources
 	Ray/Ray.cpp
 	Sphere/Sphere.cpp
 	Intersection/Intersection.cpp
-	Surface/Surface.cpp
+	Object/Object.cpp
 	Light/Light.cpp
 	Material/Material.cpp
+	World/World.cpp
 	)
 
 add_executable(${This} ${Sources})
@@ -28,7 +29,8 @@ target_include_directories(${This} PUBLIC
 	Ray
 	Sphere
 	Intersection
-	Surface
+	Object
 	Light
 	Material
+	World
 )
