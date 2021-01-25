@@ -14,7 +14,7 @@ TEST(Intersection_test, intersection_encapsulates_surface_and_t) {
     Intersection intersection(sphere, t);
 
     ASSERT_TRUE(intersection.t == t);
-    ASSERT_TRUE(intersection.sphere == sphere);
+    ASSERT_TRUE(intersection.surface == &sphere);
 }
 
 

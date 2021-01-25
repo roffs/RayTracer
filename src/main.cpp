@@ -21,12 +21,12 @@ int main()
 		
 	//define sphere in the scene
 	Sphere sphere;
-	Color pink(1.0f, 0.2f, 1.0f);
+	Color pink(1.0f, 0.2f, 0.8f);
 	sphere.material.color = pink;
 
 	//define light source
 	Tuple lightPosition = Tuple::Point(-10.0f, 10.0f, -10.0f);
-	Color lightColor(1.0f, 1.0f, 1.0f);
+	Color lightColor(0.5f, 0.2f, 1.0f);
 	Light light(lightPosition, lightColor);
 
 	//compute color for each pixel
@@ -45,9 +45,9 @@ int main()
 			Intersection currentHit = hit(intersections);
 			if (currentHit.t != std::numeric_limits<float>::infinity()) {
 				Tuple point = position(ray, currentHit.t);
-				Tuple normal = currentHit.sphere.normal(point);
+				Tuple normal = currentHit.surface->normal(point);
 				Tuple eyeDirection = -ray.direction;
-				Color finalColor = lighting(currentHit.sphere.material, light, point, eyeDirection, normal);
+				Color finalColor = lighting(currentHit.surface->material, light, point, eyeDirection, normal);
 				canvas.writePixel(x, y, finalColor);
 			}
 		}
