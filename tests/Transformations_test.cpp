@@ -211,3 +211,48 @@ TEST(Transformations_test, chained_transformations) {
 
     ASSERT_TRUE(expected == result);
 }
+
+TEST(Transformation_test, view_transformation_matrix_for_default_orientation) {
+    Tuple from = Tuple::Point(0.0f, 0.0f, 0.0f);
+    Tuple to = Tuple::Point(0.0f, 0.0f, -1.0f);
+    Tuple up = Tuple::Vector(0.0f, 1.0f, 0.0f);
+
+    Matrix t = viewTransformation(from, to, up);
+    Matrix I = Matrix::Identity(4);
+    ASSERT_TRUE(t == I);
+}
+
+TEST(Transformation_test, view_transformation_matrix_looking_in_positive_z_direction) {
+    Tuple from = Tuple::Point(0.0f, 0.0f, 0.0f);
+    Tuple to = Tuple::Point(0.0f, 0.0f, 1.0f);
+    Tuple up = Tuple::Vector(0.0f, 1.0f, 0.0f);
+
+    Matrix t = viewTransformation(from, to, up);
+    ASSERT_TRUE(t == scaling(-1.0f, 1.0f, -1.0f));
+}
+
+TEST(Transformation_test, view_transformation_matrix_moves_the_world) {
+    Tuple from = Tuple::Point(0.0f, 0.0f, 8.0f);
+    Tuple to = Tuple::Point(0.0f, 0.0f, 0.0f);
+    Tuple up = Tuple::Vector(0.0f, 1.0f, 0.0f);
+
+    Matrix t = viewTransformation(from, to, up);
+
+    ASSERT_TRUE(t == translation(0.0f, 0.0f, -8.0f));
+}
+
+TEST(Transformation_test, arbitrary_view_transformation) {
+    Tuple from = Tuple::Point(1.0f, 3.0f, 2.0f);
+    Tuple to = Tuple::Point(4.0f, -2.0f, 8.0f);
+    Tuple up = Tuple::Vector(1.0f, 1.0f, 0.0f);
+
+    Matrix t = viewTransformation(from, to, up);
+
+    Matrix expected(
+        -0.50709f, 0.50709f, 0.67612f, -2.36643f,
+        0.76772f, 0.60609f, 0.12122f, -2.82843f,
+        -0.35857f, 0.59761f, -0.71714f, 0.0f,
+        0.0f, 0.0f, 0.0f, 1.0f
+    );
+    ASSERT_TRUE(t == expected);
+}

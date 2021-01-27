@@ -1,57 +1,73 @@
 ﻿#include <iostream>
 #include <limits>
 
+#define _USE_MATH_DEFINES
+#include <cmath>
+
 #include "Canvas.h"
 #include "Sphere.h"
 #include "Ray.h"
+#include "Transformations.h"
+#include "World.h"
+#include "Light.h"
+#include "Camera.h"
 
 int main()
 {
-	//define canvas and its distance to the camera
-	int pixels = 800;
-	Canvas canvas(pixels, pixels);
+	
+	Sphere floor;
+	floor.setTransformation(scaling(10.0f, 0.01f, 10.0f));
+	floor.material = Material();
+	floor.material.color = Color(1.0f, 0.9f, 0.9f);
+	floor.material.specular = 0.0f;
 
-	Tuple rayOrigin = Tuple::Point(0.0f, 0.0f, -5.0f);
-	float wallZ = 10.0f;
+	Sphere leftWall;
+	leftWall.setTransformation(
+		translation(0.0f, 0.0f, 5.0f) * 
+		rotation_y(-M_PI/4.0f) * rotation_x(M_PI/2.0f) * 
+		scaling(10.0f, 0.01f, 10.0f)
+	);
+	leftWall.material = floor.material;
+	
+	Sphere rightWall;
+	rightWall.setTransformation(
+		translation(0.0f, 0.0f, 5.0f) * 
+		rotation_y(M_PI/4.0f) * 
+		rotation_x(M_PI/2.0f) * 
+		scaling(10.0f, 0.01f, 10.0f)
+	);
+	rightWall.material = floor.material;
 
-	float wallSize = 7.0f;
-	float pixelSize = wallSize / pixels;
+	Sphere middle;
+	middle.setTransformation(translation(-0.5f, 1.0f, 0.5f));
+	middle.material = Material();
+	middle.material.color = Color(0.1f, 1.0f, 0.5f);
+	middle.material.diffuse = 0.7f;
+	middle.material.specular = 0.3f;
 
-	float half = wallSize / 2;
-		
-	//define sphere in the scene
-	Sphere sphere;
-	Color pink(1.0f, 0.2f, 0.8f);
-	sphere.material.color = pink;
+	Sphere right;
+	right.setTransformation(translation(1.5f, 0.5f, -0.5f) * scaling(0.5f, 0.5f, 0.5f));
+	right.material = Material();
+	right.material.color = Color(0.5f, 1.0f, 0.1f);
+	right.material.diffuse = 0.7f;
+	right.material.specular = 0.3f;
+	
+	Sphere left;
+	left.setTransformation(translation(-1.5f, 0.33f, -0.75f) * scaling(0.33f, 0.33f, 0.33f));
+	left.material = Material();
+	left.material.color = Color(1.0f, 0.8f, 0.1f);
+	left.material.diffuse = 0.7f;
+	left.material.specular = 0.3f;
 
-	//define light source
-	Tuple lightPosition = Tuple::Point(-10.0f, 10.0f, -10.0f);
-	Color lightColor(0.5f, 0.2f, 1.0f);
-	Light light(lightPosition, lightColor);
+	World world;
+	world.objects = {&floor, &leftWall, &rightWall, &middle, &right, &left};
+	world.light = Light(Tuple::Point(-10.0f, 10.0f, -10.0f), Color(1.0f, 1.0f, 1.0f));
 
-	//compute color for each pixel
-	for(int y = 0; y < pixels; y++) {
-		float worldY = half - (pixelSize*y);
+	Camera camera(1024, 720, M_PI/3.0f);
+	camera.transform = viewTransformation(Tuple::Point(0.0f, 1.5f, -5.0f), Tuple::Point(0.0f, 1.0f, 0.0f), Tuple::Vector(0.0f, 1.0f, 0.0f));
 
-		for(int x = 0; x < pixels; x++) {
-			float worldX = half - (pixelSize*x);
-			
-			Tuple pos = Tuple::Point(worldX, worldY, wallZ);
-			Ray ray(rayOrigin, normalize(pos - rayOrigin));
-
-			std::vector<Intersection> intersections = intersects(ray, sphere);
-
-			Intersection currentHit = hit(intersections);
-			if (currentHit.t != std::numeric_limits<float>::infinity()) {
-				Tuple point = position(ray, currentHit.t);
-				Tuple normal = currentHit.object->normal(point);
-				Tuple eyeDirection = -ray.direction;
-				Color finalColor = lighting(currentHit.object->material, light, point, eyeDirection, normal);
-				canvas.writePixel(x, y, finalColor);
-			}
-		}
-	}
-
+	Canvas canvas = render(camera, world);
 	writeFile(canvas, "test");
+	
 	return 0;
 }

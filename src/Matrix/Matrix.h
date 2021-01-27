@@ -41,9 +41,11 @@ public:
     Matrix operator* (Matrix const& other) const;
     Tuple operator* (Tuple const& tuple) const;
     Matrix operator* (float const& scalar) const;
-};
 
-Matrix identity(int const& dimension); //returns a identity matrix with specified dimension
+    static Matrix Identity(int const& dimension); //returns a identity matrix with specified dimension
+
+    void print();
+};
 
 Matrix transpose(Matrix const& matrix);
 

@@ -167,7 +167,7 @@ TEST_F(Tuple_test, normalize_should_return_normalized_tuple){
 TEST_F(Tuple_test, cross_should_return_cross_product_of_vector){
     Tuple vector1 = Tuple::Vector(x1, y1, z1);
     Tuple vector2 = Tuple::Vector(x2, y2, z2);
-    Tuple expected = Tuple::Vector(y1*z2 - z1*y2, x1*z2 - z1*x2, x1*y2 - y1*x2);
+    Tuple expected = Tuple::Vector(y1*z2 - z1*y2, z1*x2 - x1*z2, x1*y2 - y1*x2);
     Tuple result = cross(vector1, vector2);
 
     ASSERT_TRUE(result == expected);

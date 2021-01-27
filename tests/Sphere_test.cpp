@@ -14,7 +14,7 @@ TEST(Sphere_test, construct_default_sphere) {
 
     Sphere sphere;
 
-    Matrix I = identity(4);
+    Matrix I = Matrix::Identity(4);
 
     ASSERT_TRUE(sphere.center == center);
     ASSERT_EQ(sphere.radius, radius);

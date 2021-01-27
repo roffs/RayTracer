@@ -16,6 +16,8 @@ set(Sources
 	Light/Light.cpp
 	Material/Material.cpp
 	World/World.cpp
+	Computation/Computation.cpp
+	Camera/Camera.cpp
 	)
 
 add_executable(${This} ${Sources})
@@ -33,4 +35,6 @@ target_include_directories(${This} PUBLIC
 	Light
 	Material
 	World
+	Computation
+	Camera
 )

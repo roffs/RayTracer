@@ -1,7 +1,13 @@
 #pragma once
 
+#include <vector>
+
 #include "Matrix.h"
 #include "Material.h"
+
+
+class Intersection;
+class Ray;
 
 class Object {
 public:
@@ -21,4 +27,5 @@ public:
 
     //virtual methods
     virtual Tuple normal(Tuple const &point) = 0;
+    virtual std::vector<Intersection> intersects(Ray const &originalRay) = 0;
 };

@@ -8,5 +8,6 @@ public:
     Tuple position;
     Color intensity;
 
+    Light();
     Light(Tuple position, Color intensity);
 };

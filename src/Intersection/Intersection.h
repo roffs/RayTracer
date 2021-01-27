@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#include "Object.h"
+class Object; 
 
 class Intersection {
 public:

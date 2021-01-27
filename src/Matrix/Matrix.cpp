@@ -131,9 +131,8 @@ Tuple Matrix::operator* (Tuple const& tuple) const{
  };
 
 
-//Out of scope of class
 
-Matrix identity(int const& dimension){
+Matrix Matrix::Identity(int const& dimension){
   Matrix result(dimension);
 
   for(int row = 0; row < dimension; row++){
@@ -148,6 +147,16 @@ Matrix identity(int const& dimension){
 
   return result;
 }; 
+
+
+void Matrix::print() {
+  std::cout << "| " << array[0] << ", " << array[1] << ", " << array[2] << ", " << array[3] << " |" << std::endl;
+  std::cout << "| " << array[4] << ", " << array[5] << ", " << array[6] << ", " << array[7] << " |" << std::endl;
+  std::cout << "| " << array[8] << ", " << array[9] << ", " << array[10] << ", " << array[11] << " |" << std::endl;
+  std::cout << "| " << array[12] << ", " << array[13] << ", " << array[14] << ", " << array[15] << " |" << std::endl;
+}
+
+//Out of scope of class
 
 Matrix transpose(Matrix const& matrix){
   float result[16];

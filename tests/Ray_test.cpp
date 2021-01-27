@@ -47,7 +47,7 @@ TEST(Ray_test, ray_intersects_sphere_at_two_points) {
 
     Sphere sphere; 
 
-    std::vector<Intersection> intersections = intersects(ray, sphere);
+    std::vector<Intersection> intersections = sphere.intersects(ray);
 
     ASSERT_EQ(intersections[0].t, 4.0f);
     ASSERT_EQ(intersections[1].t, 6.0f);
@@ -60,7 +60,7 @@ TEST(Ray_test, ray_intersects_tangent_sphere) {
 
     Sphere sphere; 
 
-    std::vector<Intersection> intersections = intersects(ray, sphere);
+    std::vector<Intersection> intersections = sphere.intersects(ray);
 
     ASSERT_EQ(intersections[0].t, 5.0f);
     ASSERT_EQ(intersections[1].t, 5.0f);
@@ -73,7 +73,7 @@ TEST(Ray_test, ray_misses_a_sphere) {
 
     Sphere sphere; 
 
-    std::vector<Intersection> intersections = intersects(ray, sphere);
+    std::vector<Intersection> intersections = sphere.intersects(ray);
 
     ASSERT_EQ(intersections.size(), 0);
 }
@@ -85,7 +85,7 @@ TEST(Ray_test, ray_with_origin_inside_sphere_intersects_with_it) {
 
     Sphere sphere; 
 
-    std::vector<Intersection> intersections = intersects(ray, sphere);
+    std::vector<Intersection> intersections = sphere.intersects(ray);
 
     ASSERT_EQ(intersections[0].t, -1.0f);
     ASSERT_EQ(intersections[1].t, 1.0f);
@@ -99,7 +99,7 @@ TEST(Ray_test, translating_a_ray) {
     Ray ray(origin, direction);
 
     Matrix transf = translation(3.0f, 4.0f, 5.0f);
-    Ray result = transform(ray, transf);    
+    Ray result = transformRay(ray, transf);    
 
     Tuple expectedOrigin = Tuple::Point(4.0f, 6.0f, 8.0f);
     Tuple expectedDirection = Tuple::Vector(0.0f, 1.0f, 0.0f);
@@ -114,7 +114,7 @@ TEST(Ray_test, scaling_a_ray) {
     Ray ray(origin, direction);
 
     Matrix transf = scaling(2.0f, 3.0f, 4.0f);
-    Ray result = transform(ray, transf);
+    Ray result = transformRay(ray, transf);
     
     Tuple expectedOrigin = Tuple::Point(2.0f, 6.0f, 12.0f);
     Tuple expectedDirection = Tuple::Vector(0.0f, 3.0f, 0.0f);
@@ -132,7 +132,7 @@ TEST(Ray_test, intersect_a_scaled_sphere_with_a_ray) {
 
     sphere.setTransformation(scaling(2.0f, 2.0f, 2.0f));
 
-    std::vector<Intersection> intersections = intersects(ray, sphere);
+    std::vector<Intersection> intersections = sphere.intersects(ray);
 
     ASSERT_EQ(intersections[0].t, 3.0f);
     ASSERT_EQ(intersections[1].t, 7.0f);
@@ -147,7 +147,7 @@ TEST(Ray_test, intersect_a_translated_sphere_with_a_ray) {
 
     sphere.setTransformation(translation(5.0f, 0.0f, 0.0f));
 
-    std::vector<Intersection> intersections = intersects(ray, sphere);
+    std::vector<Intersection> intersections = sphere.intersects(ray);
 
     ASSERT_EQ(intersections.size(), 0);
 }

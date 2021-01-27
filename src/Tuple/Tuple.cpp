@@ -69,7 +69,7 @@ Tuple normalize(Tuple const &tuple) {
 }
 
 Tuple cross(Tuple const &tuple1, Tuple const &tuple2) {
-    return Tuple::Vector(tuple1.y*tuple2.z - tuple1.z*tuple2.y, tuple1.x*tuple2.z - tuple1.z*tuple2.x, tuple1.x*tuple2.y - tuple1.y*tuple2.x);
+    return Tuple::Vector(tuple1.y*tuple2.z - tuple1.z*tuple2.y, tuple1.z*tuple2.x - tuple1.x*tuple2.z, tuple1.x*tuple2.y - tuple1.y*tuple2.x);
 }
 
 Tuple reflect(Tuple const &in, Tuple const &normal) {
