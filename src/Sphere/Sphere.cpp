@@ -7,26 +7,16 @@
 Sphere::Sphere() {
     center = Tuple::Point(0.0f, 0.0f, 0.0f);
     radius = 1.0f;
-    transform = Matrix::Identity(4);
 }
 
 
-Tuple Sphere::normal(Tuple const &worldPoint) {
-    Tuple objectPoint = inverse(transform) * worldPoint;
-    Tuple objectOrigin = Tuple::Point(0.0f, 0.0f, 0.0f);
-
-    Tuple objectNormal = objectPoint - objectOrigin;
-    Tuple worldNormal = transpose(inverse(transform)) * objectNormal;
-    
-    worldNormal.w = 0;
-
-    return normalize(worldNormal);
+Tuple Sphere::localNormalAt(Tuple const &localPoint) {
+    return localPoint - Tuple::Point(0.0f, 0.0f, 0.0f);
 };
 
-std::vector<Intersection> Sphere::intersects(Ray const &originalRay) {
+std::vector<Intersection> Sphere::localIntersects(Ray const &ray) {
     std::vector<Intersection> intersections;
 
-    Ray ray = transformRay(originalRay, inverse(transform));
     Tuple sphereToRay = ray.origin - center;
 
     float a = ray.direction * ray.direction;

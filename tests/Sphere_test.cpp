@@ -34,7 +34,7 @@ TEST(Sphere_test, calculate_normal_on_a_sphere_at_a_point_on_the_x_axis) {
     Sphere sphere;
     Tuple point = Tuple::Point(1.0f, 0.0f, 0.0f);
 
-    Tuple n = sphere.normal(point);
+    Tuple n = sphere.normalAt(point);
     Tuple expected = Tuple::Vector(1.0f, 0.0f, 0.0f);
 
     ASSERT_TRUE(n == expected);
@@ -44,7 +44,7 @@ TEST(Sphere_test, calculate_normal_on_a_sphere_at_a_point_on_the_y_axis) {
     Sphere sphere;
     Tuple point = Tuple::Point(0.0f, 1.0f, 0.0f);
 
-    Tuple n = sphere.normal(point);
+    Tuple n = sphere.normalAt(point);
     Tuple expected = Tuple::Vector(0.0f, 1.0f, 0.0f);
     
     ASSERT_TRUE(n == expected);
@@ -54,7 +54,7 @@ TEST(Sphere_test, calculate_normal_on_a_sphere_at_a_point_on_the_z_axis) {
     Sphere sphere;
     Tuple point = Tuple::Point(0.0f, 0.0f, 1.0f);
 
-    Tuple n = sphere.normal(point);
+    Tuple n = sphere.normalAt(point);
     Tuple expected = Tuple::Vector(0.0f, 0.0f, 1.0f);
     
     ASSERT_TRUE(n == expected);
@@ -64,7 +64,7 @@ TEST(Sphere_test, calculate_normal_on_a_sphere_at_a_nonaxial_point) {
     Sphere sphere;
     Tuple point = Tuple::Point(sqrt(3.0f)/3.0f, sqrt(3)/3.0f, sqrt(3)/3.0f);
 
-    Tuple n = sphere.normal(point);
+    Tuple n = sphere.normalAt(point);
     Tuple expected = Tuple::Vector(sqrt(3)/3.0f, sqrt(3)/3.0f, sqrt(3)/3.0f);
     
     ASSERT_TRUE(n == expected);
@@ -76,7 +76,7 @@ TEST(Sphere_test, calculate_normal_on_a_translated_sphere) {
 
     Tuple point = Tuple::Point(0.0f, 1.70711f, -0.70711f);
 
-    Tuple n = sphere.normal(point);
+    Tuple n = sphere.normalAt(point);
     Tuple expected = Tuple::Vector(0.0f, 0.70711f, -0.70711f);
     
     ASSERT_TRUE(n == expected);
@@ -88,7 +88,7 @@ TEST(Sphere_test, calculate_normal_on_a_transformedsphere) {
 
     Tuple point = Tuple::Point(0.0f, sqrt(2.0f)/2.0f, -sqrt(2.0f)/2.0f);
 
-    Tuple n = sphere.normal(point);
+    Tuple n = sphere.normalAt(point);
     Tuple expected = Tuple::Vector(0.0f, 0.97014f, -0.24254);
     
     ASSERT_TRUE(n == expected);

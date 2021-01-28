@@ -5,7 +5,6 @@
 #include "Matrix.h"
 #include "Material.h"
 
-
 class Intersection;
 class Ray;
 
@@ -24,8 +23,10 @@ public:
     void operator=(Object const& other);
 
     void setTransformation(Matrix const &transform);
+    std::vector<Intersection> intersects(Ray const &ray);
+    Tuple normalAt(Tuple const &point);  
 
     //virtual methods
-    virtual Tuple normal(Tuple const &point) = 0;
-    virtual std::vector<Intersection> intersects(Ray const &originalRay) = 0;
+    virtual std::vector<Intersection> localIntersects(Ray const &ray) = 0;
+    virtual Tuple localNormalAt(Tuple const &point) = 0;    
 };

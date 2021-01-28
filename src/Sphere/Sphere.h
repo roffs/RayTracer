@@ -16,6 +16,6 @@ public:
 
     Sphere();
 
-    Tuple normal(Tuple const &point) override;
-    std::vector<Intersection> intersects(Ray const &originalRay) override;
+    Tuple localNormalAt(Tuple const &localPoint) override;
+    std::vector<Intersection> localIntersects(Ray const &ray) override;
 };
