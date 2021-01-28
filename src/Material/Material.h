@@ -20,4 +20,4 @@ public:
 
 
 //Out of class
-Color lighting(Material const &material, Light const &light, Tuple const &position, Tuple const &eyeDirection, Tuple const &normal);
+Color lighting(Material const &material, Light const &light, Tuple const &position, Tuple const &eyeDirection, Tuple const &normal, bool inShadow);

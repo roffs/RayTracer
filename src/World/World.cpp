@@ -35,6 +35,26 @@ World World::DefaultWorld() {
     return world;
 };
 
+bool World::isShadow(Tuple point) const {
+    Tuple pointToLight = light.position - point;
+    float distance = magnitude(pointToLight);
+    Tuple direction = normalize(pointToLight);
+
+    Ray ray(point, direction);
+    std::vector<Intersection> intersections = intersectsWorld(ray, *this);
+
+    bool shadow = false; 
+
+    if (intersections.size() > 0) {
+        Intersection i = hit(intersections);
+
+        if (i.t < distance) {
+            shadow = true;
+        }
+    }
+
+    return shadow; 
+};
 
 //out of class
 
@@ -55,7 +75,8 @@ std::vector<Intersection> intersectsWorld(Ray const &ray, World const &world) {
 };
 
 Color shadeHit(World const &world, Computation const &comp) {
-    return lighting(comp.object->material, world.light, comp.point, comp.eyeDirection, comp.normal); //TODO: support multiple light sources
+    bool isShadowed = world.isShadow(comp.overPoint);
+    return lighting(comp.object->material, world.light, comp.overPoint, comp.eyeDirection, comp.normal, isShadowed); //TODO: support multiple light sources
 };
 
 Color colorAt(World const &world, Ray const &ray) {

@@ -9,6 +9,7 @@ public:
     float t;
     Object* object;
     Tuple point;
+    Tuple overPoint;
     Tuple eyeDirection;
     Tuple normal;
     bool inside;

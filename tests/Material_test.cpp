@@ -55,8 +55,9 @@ TEST(Lighting_test, lighting_with_the_eye_between_the_light_and_the_object) {
     Tuple lightPosition = Tuple::Point(0.0f, 0.0f, -10.0f);
     Color lightColor(1.0f, 1.0f, 1.0f);
     Light light(lightPosition, lightColor);
+    bool inShadow = false; 
 
-    Color result = lighting(material, light, position, eyeDirection, normal);
+    Color result = lighting(material, light, position, eyeDirection, normal, inShadow);
 
     Color expected(1.9f, 1.9f, 1.9f);
     ASSERT_TRUE(result == expected);
@@ -72,8 +73,9 @@ TEST(Lighting_test, lighting_with_the_eye_between_the_light_and_the_object_with_
     Tuple lightPosition = Tuple::Point(0.0f, 0.0f, -10.0f);
     Color lightColor(1.0f, 1.0f, 1.0f);
     Light light(lightPosition, lightColor);
+    bool inShadow = false; 
 
-    Color result = lighting(material, light, position, eyeDirection, normal);
+    Color result = lighting(material, light, position, eyeDirection, normal, inShadow);
     
     Color expected(1.0f, 1.0f, 1.0f);
     ASSERT_TRUE(result == expected);
@@ -89,8 +91,9 @@ TEST(Lighting_test, lighting_with_the_eye_between_the_light_and_the_object_with_
     Tuple lightPosition = Tuple::Point(0.0f, 10.0f, -10.0f);
     Color lightColor(1.0f, 1.0f, 1.0f);
     Light light(lightPosition, lightColor);
+    bool inShadow = false; 
 
-    Color result = lighting(material, light, position, eyeDirection, normal);
+    Color result = lighting(material, light, position, eyeDirection, normal, inShadow);
     Color expected(0.7364f, 0.7364f, 0.7364f);
     ASSERT_TRUE(result == expected);
 }
@@ -105,8 +108,9 @@ TEST(Lighting_test, lighting_with_the_eye_in_the_path_of_the_reflection_vector) 
     Tuple lightPosition = Tuple::Point(0.0f, 10.0f, -10.0f);
     Color lightColor(1.0f, 1.0f, 1.0f);
     Light light(lightPosition, lightColor);
+    bool inShadow = false; 
 
-    Color result = lighting(material, light, position, eyeDirection, normal);
+    Color result = lighting(material, light, position, eyeDirection, normal, inShadow);
 
     Color expected(1.6364f, 1.6364f, 1.6364f);
     ASSERT_TRUE(result == expected);
@@ -122,9 +126,25 @@ TEST(Lighting_test, lighting_with_the_light_behind_the_object) {
     Tuple lightPosition = Tuple::Point(0.0f, 0.0f, 10.0f);
     Color lightColor(1.0f, 1.0f, 1.0f);
     Light light(lightPosition, lightColor);
+    bool inShadow = false; 
 
-    Color result = lighting(material, light, position, eyeDirection, normal);
+    Color result = lighting(material, light, position, eyeDirection, normal, inShadow);
 
     Color expected(0.1f, 0.1f, 0.1f);
+    ASSERT_TRUE(result == expected);
+}
+
+TEST(Lighting_test, lighting_with_surface_in_shadow){
+    Material material;
+    Tuple position = Tuple::Point(0.0f, 0.0f, 0.0f);
+
+    Tuple eyeDirection = Tuple::Vector(0.0f, 0.0f, -1.0f);
+    Tuple normal = Tuple::Vector(0.0f, 0.0f, -1.0f);
+    Light light(Tuple::Point(0.0f, 0.0f, -10.0f), Color(1.0f, 1.0f, 1.0f));
+    bool inShadow = true; 
+
+    Color result = lighting(material, light, position, eyeDirection, normal, inShadow);
+    Color expected(0.1f, 0.1f, 0.1f);
+
     ASSERT_TRUE(result == expected);
 }

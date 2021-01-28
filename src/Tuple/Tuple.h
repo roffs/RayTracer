@@ -1,5 +1,7 @@
 #pragma once
 
+#define EPSILON 0.01
+
 class Tuple {
 public:
     float x, y, z, w;

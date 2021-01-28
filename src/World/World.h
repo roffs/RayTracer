@@ -17,6 +17,8 @@ public:
     World();
 
     static World DefaultWorld();
+
+    bool isShadow(Tuple point) const;
 };
 
 

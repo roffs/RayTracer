@@ -78,7 +78,7 @@ bool Matrix::operator== (Matrix const& other) const {
   if (dimension != other.dimension) { return false; }
   
   for(int i = 0; i < (dimension*dimension)-1; i++) {
-    if((array[i] - other.array[i]) > 0.0001 || (array[i] - other.array[i]) < -0.0001) { return false; }
+    if((array[i] - other.array[i]) > EPSILON || (array[i] - other.array[i]) < -EPSILON) { return false; }
   }
 
   return true;

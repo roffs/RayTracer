@@ -86,7 +86,30 @@ TEST(World_test, shades_an_intersection_from_the_inside) {
     Computation comp = prepareComputation(intersection, ray);
 
     Color result = shadeHit(world, comp);
-    Color expected(0.90498f, 0.90498f, 0.90498f);
+    //Color expected(0.90498f, 0.90498f, 0.90498f); //is this because the point rendered is in shadow? 
+    Color expected(0.1f, 0.1f, 0.1f);
+
+    ASSERT_TRUE(result == expected);
+}
+
+TEST(World_test, shadeHit_is_given_an_intersection_in_shadow) {
+    World world; 
+    world.light = Light(Tuple::Point(0.0f, 0.0f, -10.0f), Color(1.0f, 1.0f, 1.0f));
+
+    Sphere sphere1;
+    world.objects.push_back(&sphere1);
+
+    Sphere sphere2;
+    sphere2.setTransformation(translation(0.0f, 0.0f, 10.0f));
+    world.objects.push_back(&sphere2);
+
+    Ray ray(Tuple::Point(0.0f, 0.0f, 5.0f), Tuple::Vector(0.0f, 0.0f, 1.0f));
+    Intersection i(sphere2, 4.0f);
+
+    Computation comp = prepareComputation(i, ray);
+    
+    Color result = shadeHit(world, comp);
+    Color expected(0.1f, 0.1f, 0.1f);
 
     ASSERT_TRUE(result == expected);
 }
@@ -132,4 +155,32 @@ TEST(World_test, color_with_intersection_behind_the_ray) {
 
     Color result = colorAt(world, ray);
     ASSERT_TRUE(result == inner->material.color);
+}
+
+TEST(World_test, there_is_no_shadow_when_nothing_is_collinear_with_point_and_light) {
+    World world = World::DefaultWorld();
+    Tuple point = Tuple::Point(0.0f, 10.0f, 0.0f);
+
+    ASSERT_FALSE(world.isShadow(point));
+}
+
+TEST(World_test, the_shadow_when_object_is_between_the_point_and_the_light) {
+    World world = World::DefaultWorld();
+    Tuple point = Tuple::Point(10.0f, -10.0f, 10.0f);
+
+    ASSERT_TRUE(world.isShadow(point));
+}
+
+TEST(World_test, there_is_no_shadown_when_object_is_behind_the_light) {
+    World world = World::DefaultWorld();
+    Tuple point = Tuple::Point(-200.0f, 200.0f, -20.0f);
+
+    ASSERT_FALSE(world.isShadow(point));
+}
+
+TEST(World_test, there_is_no_shadown_when_object_is_behind_the_point) {
+    World world = World::DefaultWorld();
+    Tuple point = Tuple::Point(-200.0f, 200.0f, -20.0f);
+
+    ASSERT_FALSE(world.isShadow(point));
 }

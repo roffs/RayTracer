@@ -33,7 +33,7 @@ Color Color::operator* (Color const& other) const {
 }
 
 bool Color::operator== (Color const& other) const {
-    return  ((red - other.red) < 0.0001 && (red - other.red) > -0.0001) && 
-            ((green - other.green) < 0.0001 && (green - other.green) > -0.0001) && 
-            ((blue - other.blue) < 0.0001 && (blue - other.blue) > -0.0001);
+    return  ((red - other.red) < EPSILON && (red - other.red) > -EPSILON) && 
+            ((green - other.green) < EPSILON && (green - other.green) > -EPSILON) && 
+            ((blue - other.blue) < EPSILON && (blue - other.blue) > -EPSILON);
 }
