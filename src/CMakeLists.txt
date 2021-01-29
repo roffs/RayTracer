@@ -18,6 +18,7 @@ set(Sources
 	World/World.cpp
 	Computation/Computation.cpp
 	Camera/Camera.cpp
+	Plane/Plane.cpp
 	)
 
 add_executable(${This} ${Sources})
@@ -37,4 +38,5 @@ target_include_directories(${This} PUBLIC
 	World
 	Computation
 	Camera
+	Plane
 )

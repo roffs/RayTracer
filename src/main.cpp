@@ -6,6 +6,7 @@
 
 #include "Canvas.h"
 #include "Sphere.h"
+#include "Plane.h"
 #include "Ray.h"
 #include "Transformations.h"
 #include "World.h"
@@ -14,30 +15,11 @@
 
 int main()
 {
+	Plane plane;
+	plane.material.color = Color(0.8f, 0.8f, 0.8f);
+	plane.material.diffuse = 0.7f;
+	plane.material.specular = 0.3f;
 	
-	Sphere floor;
-	floor.setTransformation(scaling(10.0f, 0.01f, 10.0f));
-	floor.material = Material();
-	floor.material.color = Color(1.0f, 0.9f, 0.9f);
-	floor.material.specular = 0.0f;
-
-	Sphere leftWall;
-	leftWall.setTransformation(
-		translation(0.0f, 0.0f, 5.0f) * 
-		rotation_y(-M_PI/4.0f) * rotation_x(M_PI/2.0f) * 
-		scaling(10.0f, 0.01f, 10.0f)
-	);
-	leftWall.material = floor.material;
-	
-	Sphere rightWall;
-	rightWall.setTransformation(
-		translation(0.0f, 0.0f, 5.0f) * 
-		rotation_y(M_PI/4.0f) * 
-		rotation_x(M_PI/2.0f) * 
-		scaling(10.0f, 0.01f, 10.0f)
-	);
-	rightWall.material = floor.material;
-
 	Sphere middle;
 	middle.setTransformation(translation(-0.5f, 1.0f, 0.5f));
 	middle.material = Material();
@@ -60,7 +42,7 @@ int main()
 	left.material.specular = 0.3f;
 
 	World world;
-	world.objects = {&floor, &leftWall, &rightWall, &middle, &right, &left};
+	world.objects = {&plane, &middle, &right, &left};
 	world.light = Light(Tuple::Point(-10.0f, 10.0f, -10.0f), Color(1.0f, 1.0f, 1.0f));
 
 	Camera camera(1024, 720, M_PI/3.0f);

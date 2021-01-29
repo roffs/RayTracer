@@ -43,7 +43,6 @@ Canvas render(Camera camera, World world) {
 	//compute color for each pixel
 	for(int y = 0; y < camera.vsize; y++) {
 		for(int x = 0; x < camera.hsize; x++) {
-
 			Ray ray = camera.rayForPixel(x, y);
             Color color = colorAt(world, ray);
             canvas.writePixel(x, y, color);

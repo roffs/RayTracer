@@ -17,6 +17,7 @@ set(Sources
 	World_test.cpp
 	Computation_test.cpp
 	Camera_test.cpp
+	Plane_test.cpp
 	../src/Tuple/Tuple.cpp
 	../src/Color/Color.cpp
 	../src/Canvas/Canvas.cpp
@@ -31,6 +32,7 @@ set(Sources
 	../src/World/World.cpp
 	../src/Computation/Computation.cpp
 	../src/Camera/Camera.cpp
+	../src/Plane/Plane.cpp
 	)
 
 add_executable(${This} ${Sources})
@@ -54,6 +56,7 @@ target_include_directories(${This} PUBLIC
 	../src/World
 	../src/Computation
 	../src/Camera
+	../src/Plane
 )
 
 add_test(

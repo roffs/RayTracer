@@ -37,3 +37,4 @@ bool Color::operator== (Color const& other) const {
             ((green - other.green) < EPSILON && (green - other.green) > -EPSILON) && 
             ((blue - other.blue) < EPSILON && (blue - other.blue) > -EPSILON);
 }
+

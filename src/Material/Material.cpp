@@ -44,5 +44,6 @@ Color lighting(Material const &material, Light const &light, Tuple const &positi
     if (!inShadow) {
         result = result + diffuse + specular;
     }
+
     return result; 
 };

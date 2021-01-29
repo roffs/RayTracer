@@ -4,12 +4,12 @@
 
 #include "Object.h"
 #include "Tuple.h"
-#include "Matrix.h"
 
 #include "Intersection.h"
 
-class Sphere : public Object {
-public: 
-    Tuple localNormalAt(Tuple const &localPoint) override;
+class Plane : public Object {
+public:
+    
     std::vector<Intersection> localIntersects(Ray const &ray) override;
+    Tuple localNormalAt(Tuple const &point) override; 
 };

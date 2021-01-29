@@ -1,4 +1,6 @@
 #include <gtest/gtest.h>
+#define _USE_MATH_DEFINES
+#include <cmath>
 
 #include "World.h"
 #include "Light.h"
@@ -7,6 +9,7 @@
 #include "Ray.h"
 #include "Intersection.h"
 #include "Computation.h"
+#include "Plane.h"
 
 TEST(World_test, constructor_creates_world_with_no_objects_or_lights) {
     World world;
@@ -183,4 +186,27 @@ TEST(World_test, there_is_no_shadown_when_object_is_behind_the_point) {
     Tuple point = Tuple::Point(-200.0f, 200.0f, -20.0f);
 
     ASSERT_FALSE(world.isShadow(point));
+}
+
+TEST(World_test, color_when_a_ray_hit_the_plane) {
+    World world;
+    Plane plane;
+    plane.material.color = Color(0.5f, 1.0f, 1.0f);
+    plane.setTransformation(rotation_x(-M_PI/2.0f));
+    world.objects = {&plane};
+
+    Tuple lightPoint = Tuple::Point(0.0f, 0.0f, -5.0f);
+    Color lightColor = Color(1.0f, 1.0f, 1.0f);
+    Light light(lightPoint, lightColor);
+    world.light = light;
+
+    Tuple rayOrigin = Tuple::Point(0.0f, 0.0f, -5.0f);
+    Tuple rayDirection = Tuple::Vector(0.0f, 0.0f, 1.0f);
+    Ray ray(rayOrigin, rayDirection);
+
+    Color result = colorAt(world, ray);
+    std::cout << result.red << ", " << result.green << ", " << result.blue << std::endl;
+    Color expected(0.38066f, 0.47583f, 0.2855f);
+
+    ASSERT_TRUE(result == expected);
 }

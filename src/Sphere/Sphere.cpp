@@ -4,12 +4,6 @@
 
 #include "Ray.h" 
 
-Sphere::Sphere() {
-    center = Tuple::Point(0.0f, 0.0f, 0.0f);
-    radius = 1.0f;
-}
-
-
 Tuple Sphere::localNormalAt(Tuple const &localPoint) {
     return localPoint - Tuple::Point(0.0f, 0.0f, 0.0f);
 };
@@ -17,7 +11,7 @@ Tuple Sphere::localNormalAt(Tuple const &localPoint) {
 std::vector<Intersection> Sphere::localIntersects(Ray const &ray) {
     std::vector<Intersection> intersections;
 
-    Tuple sphereToRay = ray.origin - center;
+    Tuple sphereToRay = ray.origin - Tuple::Point(0.0f, 0.0f, 0.0f);
 
     float a = ray.direction * ray.direction;
     float b = 2 * (ray.direction * sphereToRay);
@@ -30,11 +24,15 @@ std::vector<Intersection> Sphere::localIntersects(Ray const &ray) {
         t1 = (-b - sqrt(det)) / (2*a);
         t2 = (-b + sqrt(det)) / (2*a);
 
-        Intersection int1(*this, t1);
-        Intersection int2(*this, t2);
-
-        intersections.push_back(int1);
-        intersections.push_back(int2);
+        if (t1 > 0) {
+            Intersection int1(*this, t1);
+            intersections.push_back(int1);
+        }
+        if (t2 > 0) {
+            Intersection int2(*this, t2);
+            intersections.push_back(int2);
+        }
+        
     }    
     return intersections;
 };

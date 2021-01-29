@@ -4,6 +4,7 @@
 
 #include "Tuple.h"
 #include "Ray.h"
+#include "Plane.h"
 #include "Transformations.h"
 
 TEST(Computation_test, precomputing_the_state_of_an_intersection) {
@@ -65,7 +66,7 @@ TEST(Computation_test, precomupte_should_offset_the_hitted_point) {
     Tuple rayDirection = Tuple::Vector(0.0f, 0.0f, 1.0f);
     Ray ray(rayOrigin, rayDirection);
 
-    Sphere sphere = Sphere();
+    Sphere sphere;
     sphere.setTransformation(translation(0.0f, 0.0f, 1.0f));
     Intersection i(sphere, 5.0f);
 
@@ -73,4 +74,26 @@ TEST(Computation_test, precomupte_should_offset_the_hitted_point) {
 
     ASSERT_TRUE(comp.overPoint.z < -EPSILON/2.0f);
     ASSERT_TRUE(comp.point.z > comp.overPoint.z);
+}
+
+
+TEST(Computation_test, precomputing_the_state_of_an_intersection_with_a_plane) {
+    Tuple rayOrigin = Tuple::Point(0.0f, 0.0f, -5.0f);
+    Tuple rayDirection = Tuple::Vector(0.0f, 0.0f, 1.0f);
+    Ray ray(rayOrigin, rayDirection);
+
+    Plane plane;
+    Intersection i(plane, 4.0f);
+
+    Computation comp = prepareComputation(i, ray);
+
+    Tuple expectedPoint = Tuple::Point(0.0f, 0.0f, -1.0f);
+    Tuple expectedEyeDirection = Tuple::Vector(0.0f, 0.0f, -1.0f);
+    Tuple expectedNormal = Tuple::Vector(0.0f, 1.0f, 0.0f);
+
+    ASSERT_EQ(comp.t, i.t);
+    ASSERT_TRUE(comp.object == i.object);
+    ASSERT_TRUE(comp.point == expectedPoint);
+    ASSERT_TRUE(comp.eyeDirection == expectedEyeDirection);
+    ASSERT_TRUE(comp.normal == expectedNormal);
 }

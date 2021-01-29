@@ -365,6 +365,8 @@ TEST(Matrix_test, calculate_the_inverse_of_a_matrix) {
         -0.52256f, -0.81391f, -0.30075f, 0.30639f
     );
 
+    auto lol = abs(inv(3,2));
+
     ASSERT_EQ(determinant(matrix), 532.0f);
     ASSERT_EQ(cofactor(matrix, 2, 3), -160.0f);
     ASSERT_TRUE(abs(inv(3, 2) - (-160.0f/532.0f)) < EPSILON);
