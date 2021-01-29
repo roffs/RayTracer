@@ -24,14 +24,11 @@ std::vector<Intersection> Sphere::localIntersects(Ray const &ray) {
         t1 = (-b - sqrt(det)) / (2*a);
         t2 = (-b + sqrt(det)) / (2*a);
 
-        if (t1 > 0) {
-            Intersection int1(*this, t1);
-            intersections.push_back(int1);
-        }
-        if (t2 > 0) {
-            Intersection int2(*this, t2);
-            intersections.push_back(int2);
-        }
+        Intersection int1(*this, t1);
+        intersections.push_back(int1);
+
+        Intersection int2(*this, t2);
+        intersections.push_back(int2);
         
     }    
     return intersections;

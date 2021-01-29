@@ -10,10 +10,8 @@ std::vector<Intersection> Plane::localIntersects(Ray const &ray) {
 
     if (ray.direction.y > EPSILON || ray.direction.y < -EPSILON) {
         float t = - ray.origin.y / ray.direction.y;
-        if (t > 0) {
-            Intersection i(*this, t);
-            intersections.push_back(i);
-        }
+        Intersection i(*this, t);
+        intersections.push_back(i);
     }
     return intersections;
 };
