@@ -36,3 +36,10 @@ Tuple Object::normalAt(Tuple const &point) {
 
     return normalize(worldNormal);
 };  
+
+Color Object::colorAt(Tuple const &point) const {
+    Tuple pointObjectSpace = inverse(transform) * point;
+    Tuple pointPatternSpace = inverse(material.pattern->transform) * pointObjectSpace;
+
+    return material.pattern->colorAt(pointPatternSpace);
+};

@@ -10,7 +10,7 @@ set(Sources
 	Matrix/Matrix.cpp
 	Transformations/Transformations.cpp
 	Ray/Ray.cpp
-	Sphere/Sphere.cpp
+	Object/Sphere/Sphere.cpp
 	Intersection/Intersection.cpp
 	Object/Object.cpp
 	Light/Light.cpp
@@ -18,7 +18,13 @@ set(Sources
 	World/World.cpp
 	Computation/Computation.cpp
 	Camera/Camera.cpp
-	Plane/Plane.cpp
+	Object/Plane/Plane.cpp
+	Pattern/Pattern.cpp
+	Pattern/Stripe/Stripe.cpp
+	Pattern/Gradient/Gradient.cpp
+	Pattern/Ring/Ring.cpp
+	Pattern/Grid/Grid.cpp
+	Pattern/Solid/Solid.cpp
 	)
 
 add_executable(${This} ${Sources})
@@ -30,7 +36,7 @@ target_include_directories(${This} PUBLIC
 	Matrix
 	Transformations
 	Ray
-	Sphere
+	Object/Sphere
 	Intersection
 	Object
 	Light
@@ -38,5 +44,11 @@ target_include_directories(${This} PUBLIC
 	World
 	Computation
 	Camera
-	Plane
+	Object/Plane
+	Pattern
+	Pattern/Stripe
+	Pattern/Gradient
+	Pattern/Ring
+	Pattern/Grid
+	Pattern/Solid
 )

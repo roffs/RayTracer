@@ -76,7 +76,7 @@ std::vector<Intersection> intersectsWorld(Ray const &ray, World const &world) {
 
 Color shadeHit(World const &world, Computation const &comp) {
     bool isShadowed = world.isShadow(comp.overPoint);
-    return lighting(comp.object->material, world.light, comp.overPoint, comp.eyeDirection, comp.normal, isShadowed); //TODO: support multiple light sources
+    return lighting(comp.object, world.light, comp.overPoint, comp.eyeDirection, comp.normal, isShadowed); //TODO: support multiple light sources
 };
 
 Color colorAt(World const &world, Ray const &ray) {

@@ -1,8 +1,10 @@
 #include "Material.h"
 #include <cmath>
 
+#include "Object.h"
+
 Material::Material(Color const &color, float ambient, float diffuse, float specular, float shininess) :
-    color({color.red, color.green, color.blue}), ambient(ambient), diffuse(diffuse), specular(specular), shininess(shininess) {};
+     pattern(nullptr), color({color.red, color.green, color.blue}), ambient(ambient), diffuse(diffuse), specular(specular), shininess(shininess) {};
 
 
 bool Material::operator== (Material const &other) {
@@ -17,10 +19,18 @@ bool Material::operator!= (Material const &other){
     return !((*this) == other);
 };
 
+void Material::setPattern(Pattern &p) {
+    pattern = &p;
+};
+
 
 //Out of class
-Color lighting(Material const &material, Light const &light, Tuple const &position, Tuple const &eyeDirection, Tuple const &normal, bool inShadow) {
-    Color effectiveColor = material.color * light.intensity;
+Color lighting(Object* object, Light const &light, Tuple const &position, Tuple const &eyeDirection, Tuple const &normal, bool inShadow) {
+    Material material = object->material;
+    
+    Color materialColor = (material.pattern == nullptr) ? material.color : object->colorAt(position);
+
+    Color effectiveColor = materialColor * light.intensity;
 
     Tuple pointToLightSource = normalize(light.position - position);
     

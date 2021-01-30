@@ -33,3 +33,4 @@ std::vector<Intersection> Sphere::localIntersects(Ray const &ray) {
     }    
     return intersections;
 };
+

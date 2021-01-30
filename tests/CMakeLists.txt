@@ -18,21 +18,33 @@ set(Sources
 	Computation_test.cpp
 	Camera_test.cpp
 	Plane_test.cpp
+	Pattern_test.cpp
+	Stripe_test.cpp
+	Gradient_test.cpp
+	Ring_test.cpp
+	Grid_test.cpp
+	Solid_test.cpp
 	../src/Tuple/Tuple.cpp
 	../src/Color/Color.cpp
 	../src/Canvas/Canvas.cpp
 	../src/Matrix/Matrix.cpp
 	../src/Transformations/Transformations.cpp
 	../src/Ray/Ray.cpp
-	../src/Sphere/Sphere.cpp
 	../src/Intersection/Intersection.cpp
-	../src/Object/Object.cpp
 	../src/Light/Light.cpp
 	../src/Material/Material.cpp
 	../src/World/World.cpp
 	../src/Computation/Computation.cpp
 	../src/Camera/Camera.cpp
-	../src/Plane/Plane.cpp
+	../src/Object/Object.cpp
+	../src/Object/Sphere/Sphere.cpp
+	../src/Object/Plane/Plane.cpp
+	../src/Pattern/Pattern.cpp
+	../src/Pattern/Stripe/Stripe.cpp
+	../src/Pattern/Gradient/Gradient.cpp
+	../src/Pattern/Ring/Ring.cpp
+	../src/Pattern/Grid/Grid.cpp
+	../src/Pattern/Solid/Solid.cpp
 	)
 
 add_executable(${This} ${Sources})
@@ -48,7 +60,7 @@ target_include_directories(${This} PUBLIC
 	../src/Matrix
 	../src/Transformations
 	../src/Ray
-	../src/Sphere
+	../src/Object/Sphere
 	../src/Intersection
 	../src/Object
 	../src/Light
@@ -56,7 +68,13 @@ target_include_directories(${This} PUBLIC
 	../src/World
 	../src/Computation
 	../src/Camera
-	../src/Plane
+	../src/Object/Plane
+	../src/Pattern
+	../src/Pattern/Stripe
+	../src/Pattern/Gradient
+	../src/Pattern/Ring
+	../src/Pattern/Grid
+	../src/Pattern/Solid
 )
 
 add_test(
