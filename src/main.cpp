@@ -13,16 +13,25 @@
 #include "Light.h"
 #include "Camera.h"
 
+#include "Pattern.h"
+#include "Grid.h"
+#include "Stripe.h"
+#include "Gradient.h"
+
 int main()
 {
 	Plane plane;
-	plane.material.color = Color(0.8f, 0.8f, 0.8f);
+	Grid grid = Grid(Color(0.4f, 0.4f, 0.8f), Color(0.8f, 0.4f, 0.4f));
+	plane.material.setPattern(grid);
 	plane.material.diffuse = 0.7f;
 	plane.material.specular = 0.3f;
 	
 	Sphere middle;
 	middle.setTransformation(translation(-0.5f, 1.0f, 0.5f));
 	middle.material = Material();
+	Stripe stripe = Stripe(Color(0.3f, 0.5f, 0.7f), Color(0.7f, 0.5f, 0.3f));
+	stripe.transform = rotation_x(M_PI/8) * rotation_z(M_PI/4) * scaling(0.33f, 0.33f, 0.33f);
+	middle.material.setPattern(stripe);
 	middle.material.color = Color(0.1f, 1.0f, 0.5f);
 	middle.material.diffuse = 0.7f;
 	middle.material.specular = 0.3f;
@@ -37,6 +46,9 @@ int main()
 	Sphere left;
 	left.setTransformation(translation(-1.5f, 0.33f, -0.75f) * scaling(0.33f, 0.33f, 0.33f));
 	left.material = Material();
+	Gradient gradient = Gradient(Color(1.0f, 1.0f, 0.85f), Color(0.8f, 0.15f, 0.55f));
+	gradient.transform = rotation_z(M_PI/8)*scaling(2.25f, 2.25f, 2.25f)*translation(-0.5f, 0.0f, 0.0f);
+	left.material.setPattern(gradient);
 	left.material.color = Color(1.0f, 0.8f, 0.1f);
 	left.material.diffuse = 0.7f;
 	left.material.specular = 0.3f;

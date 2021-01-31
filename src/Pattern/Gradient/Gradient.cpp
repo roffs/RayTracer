@@ -8,6 +8,6 @@ Gradient::Gradient(Color a, Color b) {
 
 Color Gradient::colorAt(Tuple const &point) {
     Color distance = colorB - colorA;
-    float fraction = point.x - std::floor(point.x);
+    float fraction = point.x - floor(point.x);
     return colorA + distance*fraction;
 };
