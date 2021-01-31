@@ -63,7 +63,7 @@ TEST(World_test, shades_an_intersection) {
     Intersection intersection(*sphere, 4.0f);
     Computation comp = prepareComputation(intersection, ray);
 
-    Color result = shadeHit(world, comp);
+    Color result = shadeHit(world, comp, 0);
     Color expected(0.38066f, 0.47583f, 0.2855f);
 
     ASSERT_TRUE(result == expected);
@@ -88,7 +88,7 @@ TEST(World_test, shades_an_intersection_from_the_inside) {
     Intersection intersection(*sphere, 0.5f);
     Computation comp = prepareComputation(intersection, ray);
 
-    Color result = shadeHit(world, comp);
+    Color result = shadeHit(world, comp, 0);
     //Color expected(0.90498f, 0.90498f, 0.90498f); //is this because the point rendered is in shadow? 
     Color expected(0.1f, 0.1f, 0.1f);
 
@@ -111,7 +111,7 @@ TEST(World_test, shadeHit_is_given_an_intersection_in_shadow) {
 
     Computation comp = prepareComputation(i, ray);
     
-    Color result = shadeHit(world, comp);
+    Color result = shadeHit(world, comp, 0);
     Color expected(0.1f, 0.1f, 0.1f);
 
     ASSERT_TRUE(result == expected);
@@ -124,7 +124,7 @@ TEST(World_test, color_when_a_ray_misses) {
     Tuple rayDirection = Tuple::Vector(0.0f, 1.0f, 0.0f);
     Ray ray(rayOrigin, rayDirection);
 
-    Color result = colorAt(world, ray);
+    Color result = colorAt(world, ray, 0);
     Color expected(0.0f, 0.0f, 0.0f);
 
     ASSERT_TRUE(result == expected);
@@ -137,7 +137,7 @@ TEST(World_test, color_when_a_ray_hit) {
     Tuple rayDirection = Tuple::Vector(0.0f, 0.0f, 1.0f);
     Ray ray(rayOrigin, rayDirection);
 
-    Color result = colorAt(world, ray);
+    Color result = colorAt(world, ray, 0);
     Color expected(0.38066f, 0.47583f, 0.2855f);
 
     ASSERT_TRUE(result == expected);
@@ -156,7 +156,7 @@ TEST(World_test, color_with_intersection_behind_the_ray) {
     Tuple rayDirection = Tuple::Vector(0.0f, 0.0f, -1.0f);
     Ray ray(rayOrigin, rayDirection);
 
-    Color result = colorAt(world, ray);
+    Color result = colorAt(world, ray, 0);
     ASSERT_TRUE(result == inner->material.color);
 }
 
@@ -186,4 +186,84 @@ TEST(World_test, there_is_no_shadown_when_object_is_behind_the_point) {
     Tuple point = Tuple::Point(-200.0f, 200.0f, -20.0f);
 
     ASSERT_FALSE(world.isShadow(point));
+}
+
+TEST(World_test, reflected_color_for_non_reflective_material) {
+    World world = World::DefaultWorld();
+
+    Tuple rayOrigin = Tuple::Point(0.0f, 0.0f, 0.0f);
+    Tuple rayDirection = Tuple::Vector(0.0f, 0.0f, 1.0f);
+    Ray ray(rayOrigin, rayDirection); 
+
+    Object* sphere = world.objects[1];
+    sphere->material.ambient = 1.0f;
+    Intersection i(*sphere, 1.0f);
+    Computation comp = prepareComputation(i, ray);
+
+    Color color = reflectedColor(world, comp, 0);
+
+    ASSERT_TRUE(color == Color(0.0f, 0.0f, 0.0f));
+}
+
+TEST(World_test, reflected_color_for_reflective_material) {
+    World world = World::DefaultWorld();
+
+    Plane plane;
+    plane.material.reflective = 0.5f;
+    plane.setTransformation(translation(0.0f, -1.0f, 0.0f));
+
+    world.objects.push_back(&plane);
+    
+    Tuple rayOrigin = Tuple::Point(0.0f, 0.0f, -3.0f);
+    Tuple rayDirection = Tuple::Vector(0.0f, -sqrt(2.0f)/2.0f, sqrt(2.0f)/2.0f);
+    Ray ray(rayOrigin, rayDirection); 
+
+    Intersection i(plane, sqrt(2.0f));
+
+    Computation comp = prepareComputation(i, ray);
+    Color color = reflectedColor(world, comp, 3);
+
+    ASSERT_TRUE(color == Color(0.19032f, 0.2379f, 0.14274f));
+}
+
+TEST(World_test, shade_hit_with_a_reflective_material) {
+     World world = World::DefaultWorld();
+
+    Plane plane;
+    plane.material.reflective = 0.5f;
+    plane.setTransformation(translation(0.0f, -1.0f, 0.0f));
+
+    world.objects.push_back(&plane);
+    
+    Tuple rayOrigin = Tuple::Point(0.0f, 0.0f, -3.0f);
+    Tuple rayDirection = Tuple::Vector(0.0f, -sqrt(2.0f)/2.0f, sqrt(2.0f)/2.0f);
+    Ray ray(rayOrigin, rayDirection); 
+
+    Intersection i(plane, sqrt(2.0f));
+
+    Computation comp = prepareComputation(i, ray);
+    Color color = shadeHit(world, comp, 3);
+    
+    ASSERT_TRUE(color == Color(0.87677f, 0.92436f, 0.82918f));
+}
+
+TEST(World_test, colorAt_with_mutually_reflective_surfaces) {
+    World world = World::DefaultWorld();
+
+    Plane plane;
+    plane.material.reflective = 0.5f;
+    plane.setTransformation(translation(0.0f, -1.0f, 0.0f));
+
+    world.objects.push_back(&plane);
+    
+    Tuple rayOrigin = Tuple::Point(0.0f, 0.0f, -3.0f);
+    Tuple rayDirection = Tuple::Vector(0.0f, -sqrt(2.0f)/2.0f, sqrt(2.0f)/2.0f);
+    Ray ray(rayOrigin, rayDirection); 
+
+    Intersection i(plane, sqrt(2.0f));
+    Computation comp = prepareComputation(i, ray);
+
+    Color color = reflectedColor(world, comp, 0);
+
+    ASSERT_TRUE(color == Color(0.0f, 0.0f, 0.0f));
 }

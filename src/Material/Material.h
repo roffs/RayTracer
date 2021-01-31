@@ -13,9 +13,10 @@ public:
     float diffuse;
     float specular;
     float shininess;
+    float reflective;
     Pattern* pattern;
 
-    Material(Color const &color = {1.0f, 1.0f, 1.0f}, float ambient = 0.1f, float diffuse = 0.9f, float specular = 0.9f, float shininess = 200.0f);
+    Material(Color const &color = {1.0f, 1.0f, 1.0f}, float ambient = 0.1f, float diffuse = 0.9f, float specular = 0.9f, float shininess = 200.0f, float reflective = 0.0f);
 
     //Operators overload
     bool operator== (Material const &other);

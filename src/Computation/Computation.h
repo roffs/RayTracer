@@ -12,6 +12,7 @@ public:
     Tuple overPoint;
     Tuple eyeDirection;
     Tuple normal;
+    Tuple reflectv;
     bool inside;
 };
 

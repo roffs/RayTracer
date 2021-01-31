@@ -17,6 +17,7 @@ TEST(Material_test, creates_default_material) {
     ASSERT_EQ(material.diffuse, 0.9f);
     ASSERT_EQ(material.specular, 0.9f);
     ASSERT_EQ(material.shininess, 200.0f);
+    ASSERT_EQ(material.reflective, 0.0f);
 }
 
 TEST(Material_test, material_may_have_color_reassigned) {

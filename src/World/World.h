@@ -26,6 +26,8 @@ public:
 
 std::vector<Intersection> intersectsWorld(Ray const &ray, World const &world);
 
-Color shadeHit(World const &world, Computation const &comp);
+Color shadeHit(World const &world, Computation const &comp, int remaining);
 
-Color colorAt(World const &world, Ray const &ray);
+Color colorAt(World const &world, Ray const &ray, int remaining);
+
+Color reflectedColor(World const &world, Computation const &comp, int remaining);

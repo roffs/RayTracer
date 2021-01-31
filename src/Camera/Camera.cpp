@@ -2,6 +2,8 @@
 
 #include "Camera.h"
 
+#define MAX_BOUNCES 3
+
 Camera::Camera(int hsize, int vsize, float fieldOfView) : 
     hsize(hsize), vsize(vsize), fieldOfView(fieldOfView), transform(Matrix::Identity(4)) {
         calculateSizes();
@@ -44,7 +46,7 @@ Canvas render(Camera camera, World world) {
 	for(int y = 0; y < camera.vsize; y++) {
 		for(int x = 0; x < camera.hsize; x++) {
 			Ray ray = camera.rayForPixel(x, y);
-            Color color = colorAt(world, ray);
+            Color color = colorAt(world, ray, MAX_BOUNCES);
             canvas.writePixel(x, y, color);
         }
 	}

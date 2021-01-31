@@ -1,4 +1,5 @@
 #include <gtest/gtest.h>
+#include <cmath>
 
 #include "Computation.h"
 
@@ -96,4 +97,18 @@ TEST(Computation_test, precomputing_the_state_of_an_intersection_with_a_plane) {
     ASSERT_TRUE(comp.point == expectedPoint);
     ASSERT_TRUE(comp.eyeDirection == expectedEyeDirection);
     ASSERT_TRUE(comp.normal == expectedNormal);
+}
+
+
+TEST(Intersection_test, precomputes_the_reflection_vector) {
+    Plane plane; 
+    
+    Tuple rayOrigin = Tuple::Point(0.0f, 1.0f, -1.0f);
+    Tuple rayDirection = Tuple::Vector(0.0f, -sqrt(2.0f)/2.0f, sqrt(2.0f)/2.0f);
+    Ray ray(rayOrigin, rayDirection);
+
+    Intersection i(plane, sqrt(2.0f));
+
+    Computation comp = prepareComputation(i, ray);
+    ASSERT_TRUE(comp.reflectv == Tuple::Vector(0.0f, sqrt(2.0f)/2.0f, sqrt(2.0f)/2.0f));
 }

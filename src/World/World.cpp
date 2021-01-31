@@ -74,12 +74,14 @@ std::vector<Intersection> intersectsWorld(Ray const &ray, World const &world) {
     return worldIntersections;
 };
 
-Color shadeHit(World const &world, Computation const &comp) {
+Color shadeHit(World const &world, Computation const &comp, int remaining) {
     bool isShadowed = world.isShadow(comp.overPoint);
-    return lighting(comp.object, world.light, comp.overPoint, comp.eyeDirection, comp.normal, isShadowed); //TODO: support multiple light sources
+    Color surface = lighting(comp.object, world.light, comp.overPoint, comp.eyeDirection, comp.normal, isShadowed); //TODO: support multiple light sources
+    Color reflected = reflectedColor(world, comp, remaining);
+    return surface + reflected;
 };
 
-Color colorAt(World const &world, Ray const &ray) {
+Color colorAt(World const &world, Ray const &ray, int remaining) {
     Color color(0.0f, 0.0f, 0.0f);
 
     std::vector<Intersection> intersections = intersectsWorld(ray, world);
@@ -88,8 +90,22 @@ Color colorAt(World const &world, Ray const &ray) {
         Intersection intersection = hit(intersections);
         if (intersection.t < std::numeric_limits<float>::infinity()) {
             Computation comp = prepareComputation(intersection, ray);
-            color = shadeHit(world, comp);
+            color = shadeHit(world, comp, remaining);
         }
     }
     return color;
 };
+
+
+Color reflectedColor(World const &world, Computation const &comp, int remaining) {
+    float reflective = comp.object->material.reflective;
+    if (reflective == 0.0f || remaining < 1) {
+        return {0.0f, 0.0f, 0.0f};
+    }
+    else {
+        Ray reflectedRay(comp.overPoint, comp.reflectv);
+        Color color = colorAt(world, reflectedRay, remaining - 1);
+        return color * reflective;
+    }
+};
+

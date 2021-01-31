@@ -12,6 +12,7 @@ Computation prepareComputation(Intersection const &i, Ray const &r) {
     comp.eyeDirection = -r.direction;
     comp.normal = i.object->normalAt(comp.point);
     comp.overPoint = comp.point + comp.normal * EPSILON;
+    comp.reflectv = reflect(r.direction, comp.normal);
 
     if(comp.normal * comp.eyeDirection < 0) {
         comp.inside = true;
