@@ -5,9 +5,10 @@
 
 class Ring : public Pattern {
 public:
-    Color colorA;
-    Color colorB;
+    Pattern* patternA;
+    Pattern* patternB;
     
     Ring(Color a, Color b);
+    Ring(Pattern &a, Pattern &b);
     Color colorAt(Tuple const &point) override;
 };

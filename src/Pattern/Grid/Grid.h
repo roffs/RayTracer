@@ -5,9 +5,11 @@
 
 class Grid : public Pattern {
 public:
-    Color colorA;
-    Color colorB;
+    Pattern* patternA;
+    Pattern* patternB;
     
     Grid(Color a, Color b);
+    Grid(Pattern &a, Pattern &b);
+    
     Color colorAt(Tuple const &point) override;
 };

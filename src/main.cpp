@@ -17,11 +17,16 @@
 #include "Grid.h"
 #include "Stripe.h"
 #include "Gradient.h"
+#include "Solid.h"
 
 int main()
 {
 	Plane plane;
-	Grid grid = Grid(Color(0.4f, 0.4f, 0.8f), Color(0.8f, 0.4f, 0.4f));
+	Grid grid2 = Grid(Color(0.2f, 0.25f, 1.0f), Color(0.8f, 1.0f, 0.2f));
+	grid2.transform = scaling(0.5f, 0.5f, 0.5f);
+	Stripe stripe2 = Stripe(Color(1.0f, 0.25f, 1.0f), Color(0.8f, 1.0f, 1.0f));
+
+	Grid grid = Grid(grid2, stripe2);
 	plane.material.setPattern(grid);
 	plane.material.diffuse = 0.7f;
 	plane.material.specular = 0.3f;
@@ -29,7 +34,10 @@ int main()
 	Sphere middle;
 	middle.setTransformation(translation(-0.5f, 1.0f, 0.5f));
 	middle.material = Material();
-	Stripe stripe = Stripe(Color(0.3f, 0.5f, 0.7f), Color(0.7f, 0.5f, 0.3f));
+
+	Grid grid3 = Grid(Color(0.8f, 0.1f, 0.9f), Color(0.1f, 0.7f, 0.5f));
+	Solid solid = Solid(Color(1.0f, 1.0f, 1.0f));
+	Stripe stripe = Stripe(grid2, solid);
 	stripe.transform = rotation_x(M_PI/8) * rotation_z(M_PI/4) * scaling(0.33f, 0.33f, 0.33f);
 	middle.material.setPattern(stripe);
 	middle.material.color = Color(0.1f, 1.0f, 0.5f);
