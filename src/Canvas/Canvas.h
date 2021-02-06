@@ -10,7 +10,8 @@ public:
     Color* arrayOfPixels;
 
     Canvas(int width, int height);
-
+    ~Canvas();
+    
     Color pixelAt(int x, int y) const;
 
     void writePixel(int x, int y, Color const& color);

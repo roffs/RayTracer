@@ -5,7 +5,10 @@
 #include "Canvas.h"
 #include "Color.h"
 
-Canvas::Canvas(int width, int height) : width(width), height(height), arrayOfPixels(new Color[width*height]){
+Canvas::Canvas(int width, int height) : width(width), height(height), arrayOfPixels(new Color[width*height]){}
+
+Canvas::~Canvas() {
+    delete[] arrayOfPixels;
 }
 
 Color Canvas::pixelAt(int x, int y) const {

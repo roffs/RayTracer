@@ -19,6 +19,8 @@ public:
     static World DefaultWorld();
 
     bool isShadow(Tuple point) const;
+
+    //void operator=(World const &other); //copy constructor
 };
 
 

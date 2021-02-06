@@ -69,7 +69,6 @@ TEST(Camera_test, render_a_default_world_with_a_camera) {
 
     Canvas image = render(camera, world);
     Color result = image.pixelAt(5, 5);
-    std::cout << result.x-0.38066 << ", " << result.y-0.47853 << ", " << result.z-0.2855 << std::endl;
     Color expectedColor(0.38066f, 0.47583f, 0.2855f);
     ASSERT_TRUE(image.pixelAt(5, 5) == expectedColor);
 }

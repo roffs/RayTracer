@@ -30,13 +30,15 @@ public:
     Matrix(int dimension); 
 
     Matrix();
-
+    ~Matrix();
+    
     //Operator overloads
     float& operator() (int row, int col); 
     float&  operator() (int row, int col) const;
 
     bool operator== (Matrix const& other) const;
     bool operator!= (Matrix const& other) const;
+    void operator=(Matrix const& other); //copy constructor
 
     Matrix operator* (Matrix const& other) const;
     Tuple operator* (Tuple const& tuple) const;

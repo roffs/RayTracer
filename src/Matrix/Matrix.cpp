@@ -61,6 +61,17 @@ Matrix::Matrix(
 Matrix::Matrix(int dimension) : array{new float[dimension*dimension]}, dimension{dimension} {};
 
 Matrix::Matrix() {};
+Matrix::~Matrix() {
+  delete[] array;
+};
+
+void Matrix::operator=(Matrix const& other){
+  (*this).dimension = other.dimension;
+  (*this).array = new float[other.dimension*other.dimension];
+  for(int i = 0; i < other.dimension*other.dimension; i++) {
+    (*this).array[i] = other.array[i];
+  }
+};
 
 //Operator overloads
 

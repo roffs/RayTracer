@@ -21,6 +21,7 @@
 
 int main()
 {
+
 	//Floor
 	Plane floor;
 	Grid grid = Grid(Color(1.0f, 1.0f, 1.0f), Color(0.0f, 0.0f, 0.0f));
@@ -35,7 +36,10 @@ int main()
 
 	Grid grid3 = Grid(Color(0.8f, 0.1f, 0.9f), Color(0.1f, 0.7f, 0.5f));
 	Solid solid = Solid(Color(1.0f, 1.0f, 1.0f));
-	middle.material.color = Color(0.7f, 0.8f, 0.8f);
+	middle.material.color = Color(0.5f, 0.4f, 0.4f);
+	middle.material.transparency = 0.8f;
+	middle.material.refractive_index = 1.0105f;
+	middle.material.reflective = 0.75f;
 	middle.material.diffuse = 0.7f;
 	middle.material.specular = 0.3f;
 	middle.material.reflective = 0.8f;
@@ -45,6 +49,9 @@ int main()
 	right.setTransformation(translation(1.5f, 0.5f, -0.5f) * scaling(0.5f, 0.5f, 0.5f));
 	right.material = Material();
 	right.material.color = Color(0.5f, 1.0f, 0.1f);
+	right.material.transparency = 0.85f;
+	right.material.refractive_index = 0.985f;
+	right.material.reflective = 0.5f;
 	right.material.diffuse = 0.7f;
 	right.material.specular = 0.3f;
 	right.material.reflective = 0.5f;

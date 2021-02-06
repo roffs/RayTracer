@@ -24,7 +24,7 @@ void Camera::calculateSizes() {
     pixelSize = (halfWidth*2.0f)/hsize;
 };
 
-Ray Camera::rayForPixel(int x, int y) {
+Ray Camera::rayForPixel(int x, int y) const {
     float xOffset = (x + 0.5f) * pixelSize;
     float yOffset = (y + 0.5f) * pixelSize;
 
@@ -39,7 +39,7 @@ Ray Camera::rayForPixel(int x, int y) {
     return {rayOrigin, rayDirection};
 };
 
-Canvas render(Camera camera, World world) {
+Canvas render(Camera const &camera, World const &world) {
 	Canvas canvas(camera.hsize, camera.vsize);
 
 	//compute color for each pixel

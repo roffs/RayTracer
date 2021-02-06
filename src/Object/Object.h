@@ -21,7 +21,7 @@ public:
 
     //operator overload
     bool operator==(Object const& other);
-    void operator=(Object const& other);
+    void operator=(Object const& other); //copy constructor
 
     void setTransformation(Matrix const &transform);
     std::vector<Intersection> intersects(Ray const &ray);

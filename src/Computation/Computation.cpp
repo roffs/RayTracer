@@ -18,6 +18,7 @@ Computation prepareComputation(Intersection const &hit, Ray const &r,  std::vect
     float* n = calculateN1andN2(hit, r, intersections);
     comp.n1 = n[0];
     comp.n2 = n[1];
+    delete[] n;
 
     if(comp.normal * comp.eyeDirection < 0) {
         comp.inside = true;

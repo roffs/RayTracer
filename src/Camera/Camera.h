@@ -17,10 +17,10 @@ public:
 
     Camera(int hsize, int vsize, float fieldOfView);
 
-    Ray rayForPixel(int x, int y);
+    Ray rayForPixel(int x, int y) const;
 
 private:
     void calculateSizes();
 };
 
-Canvas render(Camera camera, World world);
+Canvas render(Camera const &camera, World const &world);
