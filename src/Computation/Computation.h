@@ -24,5 +24,6 @@ public:
 
 Computation prepareComputation(Intersection const &hit, Ray const &r, std::vector<Intersection> intersections);
 
-
 static float* calculateN1andN2(Intersection const &hit, Ray const &r, std::vector<Intersection> intersections);
+
+float shlick(Computation const &comp);

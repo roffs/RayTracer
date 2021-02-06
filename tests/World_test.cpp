@@ -383,3 +383,31 @@ TEST(World_test, shade_hit_with_transparent_material) {
 
     ASSERT_TRUE(color == Color(0.93642f, 0.68642f, 0.68642f));
 }
+
+TEST(World_test, shade_hit_with_reflective_and_transparent_material) {
+    World world = World::DefaultWorld();
+
+    Plane floor;
+    floor.setTransformation(translation(0.0f, -1.0f, 0.0f));
+    floor.material.reflective = 0.5f;
+    floor.material.transparency = 0.5f;
+    floor.material.refractive_index = 1.5f;
+    world.objects.push_back(&floor);
+
+    Sphere sphere;
+    sphere.setTransformation(translation(0.0f, -3.5f, -0.5f));
+    sphere.material.color = Color(1.0f, 0.0f, 0.0f);
+    sphere.material.ambient = 0.5f;
+    world.objects.push_back(&sphere);
+
+    Ray ray(Tuple::Point(0.0f, 0.0f, -3.0f), Tuple::Vector(0.0f, -sqrt(2.0f)/2.0f, sqrt(2.0f)/2.0f));
+
+    std::vector<Intersection> intersections = {Intersection(floor, sqrt(2.0f))};
+
+    Computation comp = prepareComputation(intersections[0], ray, intersections);
+
+    Color color = shadeHit(world, comp, 5);
+
+    ASSERT_TRUE(color == Color(0.93391, 0.69643, 0.69243));
+}
+

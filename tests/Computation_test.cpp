@@ -176,3 +176,51 @@ TEST(Computation_test, calculates_n1_and_n2_at_different_intersections) {
     ASSERT_EQ(comp6.n1, 1.5f);
     ASSERT_EQ(comp6.n2, 1.0f);
 }
+
+TEST(Comptatuion_test, shlick_approximation_under_total_internal_reflection) {
+    Sphere sphere = Sphere::GlassSphere();
+    Ray ray(Tuple::Point(0.0f, 0.0f, sqrt(2.0f)/2.0f), Tuple::Vector(0.0f, 1.0f, 0.0f));
+
+    Intersection i1(sphere, -sqrt(2.0f)/2.0f);
+    Intersection i2(sphere, sqrt(2.0f)/2.0f);
+
+    std::vector<Intersection> intersections = {i1, i2};
+
+    Computation comp = prepareComputation(intersections[1], ray, intersections);
+
+    float reflectance = shlick(comp);
+
+    ASSERT_EQ(reflectance, 1.0f);
+}
+
+TEST(Comptatuion_test, shlick_approximation_with_perpendicular_view_angle) {
+    Sphere sphere = Sphere::GlassSphere();
+    Ray ray(Tuple::Point(0.0f, 0.0f, 0.0f), Tuple::Vector(0.0f, 1.0f, 0.0f));
+
+    Intersection i1(sphere, -1.0f);
+    Intersection i2(sphere, 1.0f);
+
+    std::vector<Intersection> intersections = {i1, i2};
+
+    Computation comp = prepareComputation(intersections[1], ray, intersections);
+
+    float reflectance = shlick(comp);
+
+    ASSERT_TRUE((reflectance-0.04f) < EPSILON && (reflectance-0.04f) > -EPSILON);
+}
+
+TEST(Comptatuion_test, shlick_approximation_with_small_angle_and_n2_greater_than_n1) {
+    Sphere sphere = Sphere::GlassSphere();
+    Ray ray(Tuple::Point(0.0f, 0.99f, -2.0f), Tuple::Vector(0.0f, 0.0f, 1.0f));
+
+    Intersection i(sphere, 1.8589f);
+
+    std::vector<Intersection> intersections = {i};
+
+    Computation comp = prepareComputation(intersections[0], ray, intersections);
+
+    float reflectance = shlick(comp);
+
+    ASSERT_TRUE((reflectance - 0.48873f) < EPSILON && (reflectance - 0.48873f) > -EPSILON);
+
+}

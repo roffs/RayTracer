@@ -80,7 +80,14 @@ Color shadeHit(World const &world, Computation const &comp, int remaining) {
     Color surface = lighting(comp.object, world.light, comp.overPoint, comp.eyeDirection, comp.normal, isShadowed); //TODO: support multiple light sources
     Color reflected = reflectedColor(world, comp, remaining);
     Color refracted = refractedColor(world, comp, remaining);
-    return surface + reflected + refracted;
+    
+    if (comp.object->material.reflective > 0.0f && comp.object->material.transparency > 0.0f) {
+        float reflectance = shlick(comp);
+        return surface + reflected*reflectance + refracted*(1-reflectance);
+    }
+    else {
+        return surface + reflected + refracted;
+    }
 };
 
 Color colorAt(World const &world, Ray const &ray, int remaining) {

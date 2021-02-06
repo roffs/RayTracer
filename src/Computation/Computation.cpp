@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <algorithm>
+#include <cmath>
 
 Computation prepareComputation(Intersection const &hit, Ray const &r,  std::vector<Intersection> intersections) {
     Computation comp; 
@@ -66,4 +67,24 @@ float* calculateN1andN2(Intersection const &hit, Ray const &r, std::vector<Inter
     ns[0] = n1;
     ns[1] = n2;
     return ns;
+};
+
+
+float shlick(Computation const &comp) {
+    float cos = comp.normal * comp.eyeDirection;
+
+    if (comp.n1 > comp.n2) {
+        float n = comp.n1 / comp.n2;
+        float sin2_t = (n*n) * (1.0f - (cos*cos));
+
+        if (sin2_t > 1.0f) {
+            return 1.0f;
+        }
+
+        //when n1 > n2 use cos(theta_t) instead of cos
+        cos = sqrt(1.0 - sin2_t);
+    }
+
+    float r0 = pow(((comp.n1 - comp.n2) / (comp.n1 + comp.n2)), 2.0f);
+    return r0 + (1-r0)*pow((1-cos), 5.0f);
 };
