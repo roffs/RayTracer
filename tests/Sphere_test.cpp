@@ -80,7 +80,7 @@ TEST(Sphere_test, calculate_normal_on_a_translated_sphere) {
     ASSERT_TRUE(n == expected);
 }
 
-TEST(Sphere_test, calculate_normal_on_a_transformedsphere) {
+TEST(Sphere_test, calculate_normal_on_a_transformed_sphere) {
     Sphere sphere;
     sphere.setTransformation(scaling(1.0f, 0.5f, 1.0f) * rotation_z(M_PI/5.0f));
 
@@ -109,4 +109,11 @@ TEST(Sphere_test, a_sphere_may_be_assigned_a_material) {
     sphere.material = material;
 
     ASSERT_TRUE(sphere.material == material);
+}
+
+TEST(Sphere_test, glass_sphere_helper_function) {
+    Sphere sphere = Sphere::GlassSphere();
+    
+    ASSERT_EQ(sphere.material.transparency, 1.0f);
+    ASSERT_EQ(sphere.material.refractive_index, 1.5f);
 }

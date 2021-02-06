@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <limits>
+#include <cmath>
 
 #include "World.h"
 #include "Sphere.h"
@@ -78,7 +79,8 @@ Color shadeHit(World const &world, Computation const &comp, int remaining) {
     bool isShadowed = world.isShadow(comp.overPoint);
     Color surface = lighting(comp.object, world.light, comp.overPoint, comp.eyeDirection, comp.normal, isShadowed); //TODO: support multiple light sources
     Color reflected = reflectedColor(world, comp, remaining);
-    return surface + reflected;
+    Color refracted = refractedColor(world, comp, remaining);
+    return surface + reflected + refracted;
 };
 
 Color colorAt(World const &world, Ray const &ray, int remaining) {
@@ -89,7 +91,7 @@ Color colorAt(World const &world, Ray const &ray, int remaining) {
     if (intersections.size() > 0){
         Intersection intersection = hit(intersections);
         if (intersection.t < std::numeric_limits<float>::infinity()) {
-            Computation comp = prepareComputation(intersection, ray);
+            Computation comp = prepareComputation(intersection, ray, intersections);
             color = shadeHit(world, comp, remaining);
         }
     }
@@ -109,3 +111,26 @@ Color reflectedColor(World const &world, Computation const &comp, int remaining)
     }
 };
 
+
+Color refractedColor(World const &world, Computation const &comp, int remaining) {
+    if (comp.object->material.transparency == 0.0f || remaining == 0) {
+        return {0.0f, 0.0f, 0.0f};
+    } 
+    
+    float nRatio = comp.n1 / comp.n2;
+    float cos_i = comp.eyeDirection * comp.normal;
+    float sin2_t = (nRatio * nRatio) * (1 - (cos_i * cos_i));
+    
+    if (sin2_t > 1) {
+        return {0.0f, 0.0f, 0.0f};
+    }
+
+    float cos_t = sqrt(1.0f - sin2_t);
+    Tuple refractedDirection = comp.normal*(nRatio*cos_i - cos_t) - comp.eyeDirection*nRatio;
+
+    Ray refractedRay(comp.underPoint, refractedDirection);
+
+    Color color1 = colorAt(world, refractedRay, remaining-1);
+    
+    return colorAt(world, refractedRay, remaining-1) * comp.object->material.transparency;
+};

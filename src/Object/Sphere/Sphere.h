@@ -12,4 +12,6 @@ class Sphere : public Object {
 public: 
     Tuple localNormalAt(Tuple const &localPoint) override;
     std::vector<Intersection> localIntersects(Ray const &ray) override;
+
+    static Sphere GlassSphere();
 };

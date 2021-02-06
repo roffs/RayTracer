@@ -48,6 +48,13 @@ TEST(Material_test, two_materials_are_equal_if_they_have_the_same_properties) {
     ASSERT_FALSE(material1 != material2);
 }
 
+TEST(Material_test, default_material_have_transparency_and_refractive_index) {
+    Material material; 
+
+    ASSERT_EQ(material.transparency, 0.0f);
+    ASSERT_EQ(material.refractive_index, 1.0f);
+}
+
 TEST(Lighting_test, lighting_with_the_eye_between_the_light_and_the_object) {
     Sphere sphere; 
     Material material;

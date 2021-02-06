@@ -61,7 +61,8 @@ TEST(World_test, shades_an_intersection) {
     Object* sphere = world.objects[0];
 
     Intersection intersection(*sphere, 4.0f);
-    Computation comp = prepareComputation(intersection, ray);
+    std::vector<Intersection> intersections = {intersection};
+    Computation comp = prepareComputation(intersection, ray, intersections);
 
     Color result = shadeHit(world, comp, 0);
     Color expected(0.38066f, 0.47583f, 0.2855f);
@@ -86,11 +87,11 @@ TEST(World_test, shades_an_intersection_from_the_inside) {
     Object* sphere = world.objects[1];
 
     Intersection intersection(*sphere, 0.5f);
-    Computation comp = prepareComputation(intersection, ray);
+    std::vector<Intersection> intersections = {intersection};
+    Computation comp = prepareComputation(intersection, ray, intersections);
 
     Color result = shadeHit(world, comp, 0);
-    //Color expected(0.90498f, 0.90498f, 0.90498f); //is this because the point rendered is in shadow? 
-    Color expected(0.1f, 0.1f, 0.1f);
+    Color expected(0.90498f, 0.90498f, 0.90498f);
 
     ASSERT_TRUE(result == expected);
 }
@@ -108,8 +109,8 @@ TEST(World_test, shadeHit_is_given_an_intersection_in_shadow) {
 
     Ray ray(Tuple::Point(0.0f, 0.0f, 5.0f), Tuple::Vector(0.0f, 0.0f, 1.0f));
     Intersection i(sphere2, 4.0f);
-
-    Computation comp = prepareComputation(i, ray);
+    std::vector<Intersection> intersections = {i};
+    Computation comp = prepareComputation(i, ray, intersections);
     
     Color result = shadeHit(world, comp, 0);
     Color expected(0.1f, 0.1f, 0.1f);
@@ -198,7 +199,8 @@ TEST(World_test, reflected_color_for_non_reflective_material) {
     Object* sphere = world.objects[1];
     sphere->material.ambient = 1.0f;
     Intersection i(*sphere, 1.0f);
-    Computation comp = prepareComputation(i, ray);
+    std::vector<Intersection> intersections = {i};
+    Computation comp = prepareComputation(i, ray, intersections);
 
     Color color = reflectedColor(world, comp, 0);
 
@@ -219,8 +221,8 @@ TEST(World_test, reflected_color_for_reflective_material) {
     Ray ray(rayOrigin, rayDirection); 
 
     Intersection i(plane, sqrt(2.0f));
-
-    Computation comp = prepareComputation(i, ray);
+    std::vector<Intersection> intersections = {i};
+    Computation comp = prepareComputation(i, ray, intersections);
     Color color = reflectedColor(world, comp, 3);
 
     ASSERT_TRUE(color == Color(0.19032f, 0.2379f, 0.14274f));
@@ -240,8 +242,8 @@ TEST(World_test, shade_hit_with_a_reflective_material) {
     Ray ray(rayOrigin, rayDirection); 
 
     Intersection i(plane, sqrt(2.0f));
-
-    Computation comp = prepareComputation(i, ray);
+    std::vector<Intersection> intersections = {i};
+    Computation comp = prepareComputation(i, ray, intersections);
     Color color = shadeHit(world, comp, 3);
     
     ASSERT_TRUE(color == Color(0.87677f, 0.92436f, 0.82918f));
@@ -261,9 +263,123 @@ TEST(World_test, colorAt_with_mutually_reflective_surfaces) {
     Ray ray(rayOrigin, rayDirection); 
 
     Intersection i(plane, sqrt(2.0f));
-    Computation comp = prepareComputation(i, ray);
+    std::vector<Intersection> intersections = {i};
+    Computation comp = prepareComputation(i, ray, intersections);
 
     Color color = reflectedColor(world, comp, 0);
 
     ASSERT_TRUE(color == Color(0.0f, 0.0f, 0.0f));
+}
+
+TEST(World_test, refracted_color_with_opaque_surface) {
+    World world = World::DefaultWorld();
+    Object* sphere = world.objects[0];
+
+    Tuple rayOrigin = Tuple::Point(0.0f, 0.0f, -5.0f);
+    Tuple rayDirection = Tuple::Vector(0.0f, 0.0f, 1.0f);
+    Ray ray(rayOrigin, rayDirection); 
+
+    Intersection i1(*sphere, 4.0f);
+    Intersection i2(*sphere, 6.0f);
+    std::vector<Intersection> intersections = {i1, i2};
+    Computation comp = prepareComputation(intersections[0], ray, intersections); 
+
+    Color color = refractedColor(world, comp, 5);
+
+    ASSERT_TRUE(color == Color(0.0f, 0.0f, 0.0f));
+}
+
+TEST(World_test, refracted_colorat_max_recursive_death) {
+    World world = World::DefaultWorld();
+    Object* sphere = world.objects[0];
+    sphere->material.transparency = 1.0f;
+    sphere->material.refractive_index = 1.5f;
+
+    Tuple rayOrigin = Tuple::Point(0.0f, 0.0f, -5.0f);
+    Tuple rayDirection = Tuple::Vector(0.0f, 0.0f, 1.0f);
+    Ray ray(rayOrigin, rayDirection); 
+
+    Intersection i1(*sphere, 4.0f);
+    Intersection i2(*sphere, 6.0f);
+    std::vector<Intersection> intersections = {i1, i2};
+    Computation comp = prepareComputation(intersections[0], ray, intersections); 
+
+    Color color = refractedColor(world, comp, 0);
+
+    ASSERT_TRUE(color == Color(0.0f, 0.0f, 0.0f));
+}
+
+TEST(World_test, refracted_color_under_total_internal_reflection) {
+    World world = World::DefaultWorld();
+    Object* sphere = world.objects[0];
+    sphere->material.transparency = 1.0f;
+    sphere->material.refractive_index = 1.5f;
+
+    Tuple rayOrigin = Tuple::Point(0.0f, 0.0f, sqrt(2.0f)/2.0f);
+    Tuple rayDirection = Tuple::Vector(0.0f, 1.0f,0.0f);
+    Ray ray(rayOrigin, rayDirection); 
+
+    Intersection i1(*sphere, -sqrt(2.0f)/2.0f);
+    Intersection i2(*sphere, sqrt(2.0f)/2.0f);
+    std::vector<Intersection> intersections = {i1, i2};
+
+    Computation comp = prepareComputation(intersections[1], ray, intersections); 
+
+    Color color = refractedColor(world, comp, 5);
+
+    ASSERT_TRUE(color == Color(0.0f, 0.0f, 0.0f));
+}
+
+TEST(World_test, refracted_color_with_refracted_ray) {
+    World world = World::DefaultWorld();
+    Object* sphere1 = world.objects[0];
+    sphere1->material.ambient = 1.0f;
+    sphere1->material.pattern = new TestPattern();
+
+    Object* sphere2 = world.objects[1];
+    sphere2->material.transparency = 1.0f;
+    sphere2->material.refractive_index = 1.5f;
+
+    Tuple rayOrigin = Tuple::Point(0.0f, 0.0f, 0.1f);
+    Tuple rayDirection = Tuple::Vector(0.0f, 1.0f, 0.0f);
+    Ray ray(rayOrigin, rayDirection); 
+
+    Intersection i1(*sphere1, -0.9899f);
+    Intersection i2(*sphere2, -0.4899f);
+    Intersection i3(*sphere2, 0.4899f);
+    Intersection i4(*sphere1, 0.9899f);
+
+    std::vector<Intersection> intersections = {i1, i2, i3, i4};
+
+    Computation comp = prepareComputation(intersections[2], ray, intersections); 
+
+    Color color = refractedColor(world, comp, 5);
+
+    ASSERT_TRUE(color == Color(0.0f, 0.99888f, 0.04725f));
+}
+
+TEST(World_test, shade_hit_with_transparent_material) {
+    World world = World::DefaultWorld();
+
+    Plane floor;
+    floor.setTransformation(translation(0.0f, -1.0f, 0.0f));
+    floor.material.transparency = 0.5f;
+    floor.material.refractive_index = 1.5f;
+    world.objects.push_back(&floor);
+
+    Sphere sphere;
+    sphere.setTransformation(translation(0.0f, -3.5f, -0.5f));
+    sphere.material.color = Color(1.0f, 0.0f, 0.0f);
+    sphere.material.ambient = 0.5f;
+    world.objects.push_back(&sphere);
+
+    Ray ray(Tuple::Point(0.0f, 0.0f, -3.0f), Tuple::Vector(0.0f, -sqrt(2.0f)/2.0f, sqrt(2.0f)/2.0f));
+
+    std::vector<Intersection> intersections = {Intersection(floor, sqrt(2.0f))};
+
+    Computation comp = prepareComputation(intersections[0], ray, intersections);
+
+    Color color = shadeHit(world, comp, 5);
+
+    ASSERT_TRUE(color == Color(0.93642f, 0.68642f, 0.68642f));
 }

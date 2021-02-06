@@ -3,8 +3,17 @@
 
 #include "Object.h"
 
-Material::Material(Color const &color, float ambient, float diffuse, float specular, float shininess, float reflective) :
-     pattern(nullptr), color({color.red, color.green, color.blue}), ambient(ambient), diffuse(diffuse), specular(specular), shininess(shininess), reflective(reflective) {};
+Material::Material(Color const &color, float ambient, float diffuse, float specular, float shininess, float reflective, float transparency, float refractive_index) :
+     pattern(nullptr), 
+     color({color.red, 
+     color.green, color.blue}), 
+     ambient(ambient), 
+     diffuse(diffuse), 
+     specular(specular), 
+     shininess(shininess), 
+     reflective(reflective),
+     transparency(transparency),
+     refractive_index(refractive_index) {};
 
 
 bool Material::operator== (Material const &other) {

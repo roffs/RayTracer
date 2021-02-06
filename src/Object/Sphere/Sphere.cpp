@@ -34,3 +34,11 @@ std::vector<Intersection> Sphere::localIntersects(Ray const &ray) {
     return intersections;
 };
 
+Sphere Sphere::GlassSphere() {
+    Sphere sphere;
+
+    sphere.material.transparency = 1.0f;
+    sphere.material.refractive_index = 1.5f;
+
+    return sphere;
+};

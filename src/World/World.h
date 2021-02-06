@@ -31,3 +31,5 @@ Color shadeHit(World const &world, Computation const &comp, int remaining);
 Color colorAt(World const &world, Ray const &ray, int remaining);
 
 Color reflectedColor(World const &world, Computation const &comp, int remaining);
+
+Color refractedColor(World const &world, Computation const &comp, int remaining);

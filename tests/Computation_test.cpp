@@ -15,8 +15,8 @@ TEST(Computation_test, precomputing_the_state_of_an_intersection) {
 
     Sphere sphere = Sphere(); 
     Intersection i(sphere, 4.0f);
-
-    Computation comp = prepareComputation(i, ray);
+    std::vector<Intersection> intersections = {i};
+    Computation comp = prepareComputation(i, ray, intersections);
 
     Tuple expectedPoint = Tuple::Point(0.0f, 0.0f, -1.0f);
     Tuple expectedEyeDirection = Tuple::Vector(0.0f, 0.0f, -1.0f);
@@ -36,8 +36,8 @@ TEST(Computation_test, precomuptes_intersection_when_it_is_outside) {
 
     Sphere sphere = Sphere(); 
     Intersection i(sphere, 4.0f);
-
-    Computation comp = prepareComputation(i, ray);
+    std::vector<Intersection> intersections = {i};
+    Computation comp = prepareComputation(i, ray, intersections);
 
     ASSERT_FALSE(comp.inside);
 }
@@ -49,8 +49,8 @@ TEST(Computation_test, precomuptes_intersection_when_it_is_inside) {
 
     Sphere sphere = Sphere(); 
     Intersection i(sphere, 1.0f);
-
-    Computation comp = prepareComputation(i, ray);   
+    std::vector<Intersection> intersections = {i};
+    Computation comp = prepareComputation(i, ray, intersections);
 
     Tuple expectedPoint = Tuple::Point(0.0f, 0.0f, 1.0f);
     Tuple expectedEyeDirection = Tuple::Vector(0.0f, 0.0f, -1.0f);
@@ -62,7 +62,7 @@ TEST(Computation_test, precomuptes_intersection_when_it_is_inside) {
     ASSERT_TRUE(comp.normal == expectedNormal);
 }
 
-TEST(Computation_test, precomupte_should_offset_the_hitted_point) {
+TEST(Computation_test, overPoint_should_offset_the_hitted_point) {
     Tuple rayOrigin = Tuple::Point(0.0f, 0.0f, -5.0f);
     Tuple rayDirection = Tuple::Vector(0.0f, 0.0f, 1.0f);
     Ray ray(rayOrigin, rayDirection);
@@ -70,13 +70,27 @@ TEST(Computation_test, precomupte_should_offset_the_hitted_point) {
     Sphere sphere;
     sphere.setTransformation(translation(0.0f, 0.0f, 1.0f));
     Intersection i(sphere, 5.0f);
-
-    Computation comp = prepareComputation(i, ray);   
+    std::vector<Intersection> intersections = {i};
+    Computation comp = prepareComputation(i, ray, intersections);  
 
     ASSERT_TRUE(comp.overPoint.z < -EPSILON/2.0f);
     ASSERT_TRUE(comp.point.z > comp.overPoint.z);
 }
 
+TEST(Computation_test, underPoint_should_offset_the_hitted_point) {
+    Tuple rayOrigin = Tuple::Point(0.0f, 0.0f, -5.0f);
+    Tuple rayDirection = Tuple::Vector(0.0f, 0.0f, 1.0f);
+    Ray ray(rayOrigin, rayDirection);
+
+    Sphere sphere;
+    sphere.setTransformation(translation(0.0f, 0.0f, 1.0f));
+    Intersection i(sphere, 5.0f);
+    std::vector<Intersection> intersections = {i};
+    Computation comp = prepareComputation(i, ray, intersections);  
+
+    ASSERT_TRUE(comp.underPoint.z > EPSILON/2.0f);
+    ASSERT_TRUE(comp.point.z < comp.underPoint.z);
+}
 
 TEST(Computation_test, precomputing_the_state_of_an_intersection_with_a_plane) {
     Tuple rayOrigin = Tuple::Point(0.0f, 0.0f, -5.0f);
@@ -85,8 +99,8 @@ TEST(Computation_test, precomputing_the_state_of_an_intersection_with_a_plane) {
 
     Plane plane;
     Intersection i(plane, 4.0f);
-
-    Computation comp = prepareComputation(i, ray);
+    std::vector<Intersection> intersections = {i};
+    Computation comp = prepareComputation(i, ray, intersections);
 
     Tuple expectedPoint = Tuple::Point(0.0f, 0.0f, -1.0f);
     Tuple expectedEyeDirection = Tuple::Vector(0.0f, 0.0f, -1.0f);
@@ -100,7 +114,7 @@ TEST(Computation_test, precomputing_the_state_of_an_intersection_with_a_plane) {
 }
 
 
-TEST(Intersection_test, precomputes_the_reflection_vector) {
+TEST(Computation_test, precomputes_the_reflection_vector) {
     Plane plane; 
     
     Tuple rayOrigin = Tuple::Point(0.0f, 1.0f, -1.0f);
@@ -108,7 +122,57 @@ TEST(Intersection_test, precomputes_the_reflection_vector) {
     Ray ray(rayOrigin, rayDirection);
 
     Intersection i(plane, sqrt(2.0f));
-
-    Computation comp = prepareComputation(i, ray);
+    std::vector<Intersection> intersections = {i};
+    Computation comp = prepareComputation(i, ray, intersections);
     ASSERT_TRUE(comp.reflectv == Tuple::Vector(0.0f, sqrt(2.0f)/2.0f, sqrt(2.0f)/2.0f));
+}
+
+
+TEST(Computation_test, calculates_n1_and_n2_at_different_intersections) {
+    Sphere A = Sphere::GlassSphere();
+    A.setTransformation(scaling(2.0f, 2.0f, 2.0f));
+    A.material.refractive_index = 1.5f;
+
+    Sphere B = Sphere::GlassSphere();
+    B.setTransformation(translation(0.0f, 0.0f, -0.25));
+    B.material.refractive_index = 2.0f;
+
+    Sphere C = Sphere::GlassSphere();
+    C.setTransformation(translation(0.0f, 0.0f, 0.25));
+    C.material.refractive_index = 2.5f;
+
+    Ray ray(Tuple::Point(0.0f, 0.0f, -4.0f), Tuple::Vector(0.0f, 0.0f, 1.0f));
+
+    Intersection a1(A, 2.0f);
+    Intersection b1(B, 2.75f);
+    Intersection c1(C, 3.25f);
+    Intersection b2(B, 4.75f);
+    Intersection c2(C, 5.25f);
+    Intersection a2(A, 6.0f);
+
+    std::vector<Intersection> intersections = {a1, b1, c1, b2, c2, a2};
+
+    Computation comp1 = prepareComputation(intersections[0], ray, intersections);
+    ASSERT_EQ(comp1.n1, 1.0f);
+    ASSERT_EQ(comp1.n2, 1.5f);
+
+    Computation comp2 = prepareComputation(intersections[1], ray, intersections);
+    ASSERT_EQ(comp2.n1, 1.5f);
+    ASSERT_EQ(comp2.n2, 2.0f);
+
+    Computation comp3 = prepareComputation(intersections[2], ray, intersections);
+    ASSERT_EQ(comp3.n1, 2.0f);
+    ASSERT_EQ(comp3.n2, 2.5f);
+
+    Computation comp4 = prepareComputation(intersections[3], ray, intersections);
+    ASSERT_EQ(comp4.n1, 2.5f);
+    ASSERT_EQ(comp4.n2, 2.5f);
+
+    Computation comp5 = prepareComputation(intersections[4], ray, intersections);
+    ASSERT_EQ(comp5.n1, 2.5f);
+    ASSERT_EQ(comp5.n2, 1.5f);
+
+    Computation comp6 = prepareComputation(intersections[5], ray, intersections);
+    ASSERT_EQ(comp6.n1, 1.5f);
+    ASSERT_EQ(comp6.n2, 1.0f);
 }

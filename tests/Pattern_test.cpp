@@ -12,8 +12,7 @@ public:
 };
 
 TEST_F(Pattern_test, default_pattern_transformation_is_identity_matrix) {
-    Stripe stripe(white, black);
-    Pattern* pattern = &stripe; 
+    Pattern* pattern = new TestPattern; 
     
     ASSERT_TRUE(pattern->transform == Matrix::Identity(4));
 }
@@ -23,31 +22,31 @@ TEST_F(Pattern_test, pattern_with_an_object_transformation) {
     Sphere sphere;
     sphere.setTransformation(scaling(2.0f, 2.0f, 2.0f));
 
-    Stripe stripe(white, black);
-    sphere.material.setPattern(stripe);
+    Pattern* pattern = new TestPattern; 
+    sphere.material.setPattern(*pattern);
 
-    ASSERT_TRUE(sphere.colorAt(Tuple::Point(1.5f, 0.0f, 0.0f)) == white);
+    ASSERT_TRUE(sphere.colorAt(Tuple::Point(2.0f, 3.0f, 4.0f)) == Color(1.0f, 1.5f, 2.0f));
 }
 
-TEST_F(Pattern_test, pattern__with_a_pattern_transformation) {
+TEST_F(Pattern_test, pattern_with_a_pattern_transformation) {
     Sphere sphere;
 
-    Stripe stripe(white, black);
-    stripe.transform = scaling(2.0f, 2.0f, 2.0f);
+    Pattern* pattern = new TestPattern; 
+    pattern->transform = scaling(2.0f, 2.0f, 2.0f);
 
-    sphere.material.setPattern(stripe);
+    sphere.material.setPattern(*pattern);
 
-    ASSERT_TRUE(sphere.colorAt(Tuple::Point(1.5f, 0.0f, 0.0f)) == white);
+    ASSERT_TRUE(sphere.colorAt(Tuple::Point(2.0f, 3.0f, 4.0f)) == Color(1.0f, 1.5f, 2.0f));
 }
 
 TEST_F(Pattern_test, pattern_with_both_pattern_and_object_transformation) {
     Sphere sphere;
     sphere.setTransformation(scaling(2.0f, 2.0f, 2.0f));
 
-    Stripe stripe(white, black);
-    stripe.transform = translation(0.5f, 0.0f, 0.0f);
+    Pattern* pattern = new TestPattern; 
+    pattern->transform= translation(0.5f, 1.0f, 1.5f);
 
-    sphere.material.setPattern(stripe);
+    sphere.material.setPattern(*pattern);
 
-    ASSERT_TRUE(sphere.colorAt(Tuple::Point(2.5f, 0.0f, 0.0f)) == white);
+    ASSERT_TRUE(sphere.colorAt(Tuple::Point(2.5f, 3.0f, 3.5f)) ==  Color(0.75f, 0.5f, 0.25f));
 }
