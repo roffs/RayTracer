@@ -6,6 +6,7 @@
 
 #include "Canvas.h"
 #include "Sphere.h"
+#include "Cube.h"
 #include "Plane.h"
 #include "Ray.h"
 #include "Transformations.h"
@@ -30,7 +31,7 @@ int main()
 	floor.material.specular = 0.3f;
 	
 	//Sphere1
-	Sphere middle;
+	Cube middle;
 	middle.setTransformation(translation(-0.5f, 1.0f, 0.5f));
 	middle.material = Material();
 

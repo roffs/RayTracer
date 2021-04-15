@@ -18,6 +18,7 @@ set(Sources
 	Computation_test.cpp
 	Camera_test.cpp
 	Plane_test.cpp
+	Cube_test.cpp
 	Pattern_test.cpp
 	Stripe_test.cpp
 	Gradient_test.cpp
@@ -39,6 +40,7 @@ set(Sources
 	../src/Object/Object.cpp
 	../src/Object/Sphere/Sphere.cpp
 	../src/Object/Plane/Plane.cpp
+	../src/Object/Cube/Cube.cpp
 	../src/Pattern/Pattern.cpp
 	../src/Pattern/Stripe/Stripe.cpp
 	../src/Pattern/Gradient/Gradient.cpp
@@ -60,7 +62,6 @@ target_include_directories(${This} PUBLIC
 	../src/Matrix
 	../src/Transformations
 	../src/Ray
-	../src/Object/Sphere
 	../src/Intersection
 	../src/Object
 	../src/Light
@@ -68,7 +69,9 @@ target_include_directories(${This} PUBLIC
 	../src/World
 	../src/Computation
 	../src/Camera
+	../src/Object/Sphere
 	../src/Object/Plane
+	../src/Object/Cube
 	../src/Pattern
 	../src/Pattern/Stripe
 	../src/Pattern/Gradient
